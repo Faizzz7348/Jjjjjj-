@@ -76,6 +76,8 @@ async function main() {
       name: 'Selangor Main Route',
       description: 'Main delivery route for Selangor area',
       region: 'selangor',
+      shift: 'AM',
+      deliveryMode: 'daily',
       locations: {
         create: [
           {
@@ -84,11 +86,14 @@ async function main() {
             address: 'Jalan SS2, Petaling Jaya',
             contact: '03-1234567',
             position: 0,
+            deliveryMode: 'daily',
+            lat: '3.1073',
+            lng: '101.6067',
             deliverySchedule: {
               create: [
-                { dayOfWeek: 1 }, // Monday
-                { dayOfWeek: 3 }, // Wednesday
-                { dayOfWeek: 5 }, // Friday
+                { day: 'Monday', mode: 'daily' },
+                { day: 'Wednesday', mode: 'daily' },
+                { day: 'Friday', mode: 'daily' },
               ],
             },
           },
@@ -98,10 +103,13 @@ async function main() {
             address: 'Seksyen 2, Shah Alam',
             contact: '03-7654321',
             position: 1,
+            deliveryMode: 'alt1',
+            lat: '3.0733',
+            lng: '101.5185',
             deliverySchedule: {
               create: [
-                { dayOfWeek: 2 }, // Tuesday
-                { dayOfWeek: 4 }, // Thursday
+                { day: 'Tuesday', mode: 'alt1' },
+                { day: 'Thursday', mode: 'alt1' },
               ],
             },
           },
@@ -117,6 +125,8 @@ async function main() {
       name: 'Kuala Lumpur Main Route',
       description: 'Main delivery route for KL area',
       region: 'kuala-lumpur',
+      shift: 'PM',
+      deliveryMode: 'daily',
       locations: {
         create: [
           {
@@ -125,13 +135,16 @@ async function main() {
             address: 'Jalan Ampang, KLCC',
             contact: '03-2222333',
             position: 0,
+            deliveryMode: 'daily',
+            lat: '3.1578',
+            lng: '101.7123',
             deliverySchedule: {
               create: [
-                { dayOfWeek: 1 },
-                { dayOfWeek: 2 },
-                { dayOfWeek: 3 },
-                { dayOfWeek: 4 },
-                { dayOfWeek: 5 },
+                { day: 'Monday', mode: 'daily' },
+                { day: 'Tuesday', mode: 'daily' },
+                { day: 'Wednesday', mode: 'daily' },
+                { day: 'Thursday', mode: 'daily' },
+                { day: 'Friday', mode: 'daily' },
               ],
             },
           },
