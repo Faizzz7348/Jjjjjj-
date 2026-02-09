@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma'
 // PUT /api/locations/[id]
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
     const { code, location, name, delivery, address, contact, notes, no, position, deliveryMode, lat, lng, active, deliverySchedule, qrCodeImages } = body
 
@@ -93,10 +93,10 @@ export async function PUT(
 // DELETE /api/locations/[id]
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     await prisma.location.delete({
       where: { id }

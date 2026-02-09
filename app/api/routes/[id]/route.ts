@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma'
 // PUT /api/routes/[id]
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
     const { code, location, name, delivery, description, shift, deliveryMode, active, locations } = body
 
@@ -173,10 +173,10 @@ export async function PUT(
 // DELETE /api/routes/[id]
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     await prisma.route.delete({
       where: { id }

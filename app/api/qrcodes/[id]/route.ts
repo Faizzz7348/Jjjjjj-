@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma'
 // PUT /api/qrcodes/[id] - Update QR code
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
     const { imageUrl, destinationUrl, title, position, active } = body
 
@@ -35,10 +35,10 @@ export async function PUT(
 // DELETE /api/qrcodes/[id] - Delete QR code
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     await (prisma as any).qrCodeImage.delete({
       where: { id }
