@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DATABASE_POSTGRES_URL")
+}
+
+// Route management models
+model Route {
+  id           String     @id @default(cuid())
+  code         String     @unique
+  name         String
+  description  String?
+  region       String     // selangor, kuala-lumpur, etc
+  shift        String?    // AM, PM
+  deliveryMode String?    // daily, alt1, alt2, weekday, weekend
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  locations    Location[]
+
+  @@index([region])
+  @@index([code])
+}
+
+model Location {
+  id               String         @id @default(cuid())
+  routeId          String
+  route            Route          @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  code             String
+  name             String
+  address          String?
+  contact          String?
+  notes            String?
+  position         Int            @default(0)
+  active           Boolean        @default(true)
+  deliveryMode     String?        // daily, alt1, alt2, weekday, weekend
+  lat              String?
+  lng              String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  deliverySchedule DeliverySchedule[]
+  qrCodeImages     QrCodeImage[]
+
+  @@index([routeId])
+  @@index([code])
+}
+
+model QrCodeImage {
+  id             String   @id @default(cuid())
+  locationId     String
+  location       Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  imageUrl       String   // URL for the QR code image
+  destinationUrl String   // URL where QR code points to
+  title          String
+  position       Int      @default(0)
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([locationId])
+  @@index([position])
+}
+
+model DeliverySchedule {
+  id         String   @id @default(cuid())
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  day        String   // day name or pattern
+  mode       String   // delivery mode for this schedule
+  startDate  DateTime?
+  endDate    DateTime?
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([locationId])
+  @@index([day])
+}
+
+// Gallery models for Standard page
+model GalleryRow {
+  id        String        @id @default(cuid())
+  title     String
+  position  Int           @default(0)
+  active    Boolean       @default(true)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  images    GalleryImage[]
+
+  @@index([position])
+}
+
+model GalleryImage {
+  id        String     @id @default(cuid())
+  rowId     String
+  row       GalleryRow @relation(fields: [rowId], references: [id], onDelete: Cascade)
+  url       String
+  title     String
+  subtitle  String?
+  position  Int        @default(0)
+  active    Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([rowId])
+  @@index([position])
+}
+
+// User management (optional)
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("user") // user, admin
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
