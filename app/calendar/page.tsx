@@ -339,26 +339,27 @@ export default function CalendarPage() {
               /* Theme Standard Borders */
               .fc-theme-standard td,
               .fc-theme-standard th {
-                border-color: #003d5c;
+                border-color: hsl(var(--border));
               }
               
               .fc-theme-standard .fc-scrollgrid {
-                border-color: #003d5c;
+                border-color: hsl(var(--border));
               }
               
-              /* Column Headers */
+              /* Column Headers - Improved visibility */
               .fc .fc-col-header-cell {
-                background: #002b49;
-                color: #90e0ef;
-                font-weight: 600;
+                background: hsl(var(--muted));
+                color: hsl(var(--foreground));
+                font-weight: 700;
                 padding: 0.75rem 0.5rem;
-                border: 1px solid #003d5c;
+                border: 1px solid hsl(var(--border));
               }
               
               .fc .fc-col-header-cell-cushion {
-                color: #90e0ef;
+                color: hsl(var(--foreground));
                 text-decoration: none;
-                font-size: 0.875rem;
+                font-size: 0.9375rem;
+                font-weight: 700;
               }
               
 
@@ -366,17 +367,17 @@ export default function CalendarPage() {
               /* Today Highlighting */
               .fc .fc-daygrid-day.fc-day-today,
               .fc .fc-timegrid-col.fc-day-today {
-                background-color: rgba(0, 43, 73, 0.15);
+                background-color: hsl(var(--accent) / 0.15);
               }
               
               .fc .fc-timegrid-col.fc-day-today {
-                background-color: rgba(0, 43, 73, 0.15);
+                background-color: hsl(var(--accent) / 0.15);
               }
               
               /* Time Grid Background */
               .fc .fc-timegrid-col {
                 background: hsl(var(--card));
-                border-right: 1px solid #003d5c;
+                border-right: 1px solid hsl(var(--border));
               }
               
               .fc .fc-timegrid-body {
@@ -385,18 +386,18 @@ export default function CalendarPage() {
               
               /* Alternate row subtle tint */
               .fc .fc-timegrid-slot {
-                border-color: #003d5c;
+                border-color: hsl(var(--border));
               }
               
               .fc .fc-timegrid-slot-lane {
-                border-color: #003d5c;
+                border-color: hsl(var(--border));
               }
               
-              /* Day Numbers in TimeGrid */
+              /* Day Numbers in TimeGrid - More visible */
               .fc .fc-daygrid-day-number,
               .fc .fc-timegrid-slot-label {
-                color: #90e0ef;
-                font-weight: 500;
+                color: hsl(var(--foreground));
+                font-weight: 600;
                 padding: 0.25rem;
               }
               
@@ -405,12 +406,14 @@ export default function CalendarPage() {
                 height: 3rem;
               }
               
+              /* Time labels - Much more visible */
               .fc .fc-timegrid-slot-label {
-                font-size: 0.75rem;
-                color: #90e0ef;
+                font-size: 0.8125rem;
+                color: hsl(var(--foreground));
+                font-weight: 600;
               }
               
-              /* Events */
+              /* Events - Better visibility */
               .fc-event {
                 cursor: pointer;
                 border-radius: 0.375rem;
@@ -420,102 +423,110 @@ export default function CalendarPage() {
               }
               
               .fc-event:hover {
-                opacity: 0.9;
+                opacity: 0.95;
                 transform: scale(1.02);
-                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);
               }
               
               .fc-event-title,
               .fc-event-time {
                 font-size: 0.875rem;
-                font-weight: 500;
+                font-weight: 600;
                 padding: 0.125rem;
+                color: white !important;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
               }
               
-              /* List View Styling */
+              /* List View Styling - Much more visible */
               .fc .fc-list {
-                border-color: #003d5c;
+                border-color: hsl(var(--border));
               }
               
               .fc .fc-list-day-cushion {
-                background: #002b49;
-                color: #90e0ef;
-                padding: 0.75rem 1rem;
-                font-weight: 600;
-                border: 1px solid #003d5c;
+                background: hsl(var(--muted));
+                color: hsl(var(--foreground));
+                padding: 0.875rem 1rem;
+                font-weight: 700;
+                font-size: 0.9375rem;
+                border: 1px solid hsl(var(--border));
               }
               
               .fc .fc-list-event:hover td {
-                background-color: rgba(0, 43, 73, 0.3);
+                background-color: hsl(var(--accent));
               }
               
               .fc .fc-list-event-dot {
-                border-width: 4px;
+                border-width: 5px;
               }
               
               .fc .fc-list-event-title a,
               .fc .fc-list-event-time {
-                color: #90e0ef;
-                font-weight: 500;
+                color: hsl(var(--foreground));
+                font-weight: 600;
+                font-size: 0.9375rem;
               }
               
               .fc .fc-list-table td {
                 padding: 1rem;
-                border-color: #003d5c;
+                border-color: hsl(var(--border));
                 background: hsl(var(--card));
               }
               
-              /* All Day Slot */
+              /* All Day Slot - Better visibility */
               .fc .fc-timegrid-divider {
-                background: #002b49;
-                border-color: #003d5c;
+                background: hsl(var(--muted));
+                border-color: hsl(var(--border));
               }
               
               .fc .fc-timegrid-axis-cushion {
-                color: #90e0ef;
-                font-size: 0.75rem;
+                color: hsl(var(--foreground));
+                font-size: 0.8125rem;
+                font-weight: 600;
               }
               
-              /* Now Indicator */
+              /* Now Indicator - More prominent */
               .fc .fc-timegrid-now-indicator-line {
-                border-color: #90e0ef;
+                border-color: hsl(var(--primary));
                 border-width: 2px;
               }
               
               .fc .fc-timegrid-now-indicator-arrow {
-                border-color: #90e0ef;
+                border-color: hsl(var(--primary));
                 border-width: 5px;
               }
               
               /* Scrollbar Styling */
               .fc-scroller::-webkit-scrollbar {
-                width: 8px;
-                height: 8px;
+                width: 10px;
+                height: 10px;
               }
               
               .fc-scroller::-webkit-scrollbar-track {
-                background: rgba(0, 43, 73, 0.3);
+                background: hsl(var(--muted) / 0.3);
                 border-radius: 4px;
               }
               
               .fc-scroller::-webkit-scrollbar-thumb {
-                background: rgba(0, 61, 92, 0.5);
+                background: hsl(var(--muted-foreground) / 0.5);
                 border-radius: 4px;
               }
               
               .fc-scroller::-webkit-scrollbar-thumb:hover {
-                background: rgba(0, 61, 92, 0.7);
+                background: hsl(var(--muted-foreground) / 0.7);
               }
               
-              /* Dark mode adjustments */
-              .dark .fc .fc-list-day-cushion {
-                background: #001a2e;
-                border-color: #002b49;
+              /* Better contrast for day header in week/day views */
+              .fc .fc-day-sun,
+              .fc .fc-day-sat {
+                color: hsl(var(--foreground));
               }
               
-              .dark .fc .fc-col-header-cell {
-                background: #001a2e;
-                border-color: #002b49;
+              /* More visible empty state */
+              .fc .fc-list-empty {
+                background: hsl(var(--muted));
+                color: hsl(var(--foreground));
+                font-weight: 600;
+                padding: 2rem;
               }
             `}</style>
             

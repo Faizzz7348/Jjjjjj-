@@ -17,7 +17,7 @@ export async function PUT(
       data: {
         ...(code !== undefined && { code }),
         ...((location !== undefined || name !== undefined) && { name: location || name }),
-        ...((delivery !== undefined || address !== undefined) && { address: delivery || address }),
+        ...(address !== undefined && { address }),  // Only use address field, don't mix with delivery
         ...(contact !== undefined && { contact }),
         ...(notes !== undefined && { notes }),
         ...((no !== undefined || position !== undefined) && { position: no !== undefined ? no : position }),

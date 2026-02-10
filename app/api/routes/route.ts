@@ -41,13 +41,25 @@ export async function GET(request: NextRequest) {
       shift: route.shift as "AM" | "PM" || "AM",
       deliveryMode: route.deliveryMode,
       lastUpdateTime: route.updatedAt,
-      locations: route.locations.map((loc: any) => ({
+      locations: route.locations.map((loc: any) => {
+        // Map deliveryMode to delivery display text
+        let deliveryDisplay = '';
+        switch(loc.deliveryMode) {
+          case 'daily': deliveryDisplay = 'Daily'; break;
+          case 'alt1': deliveryDisplay = 'Alt 1'; break;
+          case 'alt2': deliveryDisplay = 'Alt 2'; break;
+          case 'weekday': deliveryDisplay = 'Weekday'; break;
+          case 'weekend': deliveryDisplay = 'Weekend'; break;
+          default: deliveryDisplay = 'Daily';
+        }
+        
+        return {
         id: loc.id,
         no: loc.position,  // position → no
         code: loc.code,
         location: loc.name,  // name → location
-        delivery: loc.address || loc.deliveryMode || '',  // address → delivery
-        deliveryMode: loc.deliveryMode,
+        delivery: deliveryDisplay,  // deliveryMode → delivery display text
+        deliveryMode: loc.deliveryMode || 'daily',
         lat: loc.lat || '',
         lng: loc.lng || '',
         qrCodeImages: (loc.qrCodeImages || []).map((qr: any) => ({
@@ -69,7 +81,7 @@ export async function GET(request: NextRequest) {
           startDate: schedule.startDate?.toISOString() || null,
           endDate: schedule.endDate?.toISOString() || null,
         }))
-      }))
+      }})
     }))
 
     return NextResponse.json(transformedRoutes)
@@ -108,11 +120,11 @@ export async function POST(request: NextRequest) {
           create: locations.map((loc: any, index: number) => ({
             code: loc.code,
             name: loc.location || loc.name,  // location → name
-            address: loc.address || loc.delivery || '',  // delivery → address
+            address: loc.address || '',  // Don't use delivery field as fallback
             contact: loc.contact || '',
             notes: loc.notes || '',
             position: loc.no !== undefined ? loc.no : (loc.position !== undefined ? loc.position : index),  // no → position
-            deliveryMode: loc.deliveryMode,
+            deliveryMode: loc.deliveryMode || 'daily',
             lat: loc.lat,
             lng: loc.lng,
             active: loc.active !== undefined ? loc.active : true,

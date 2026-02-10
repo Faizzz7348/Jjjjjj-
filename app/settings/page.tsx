@@ -259,7 +259,7 @@ export default function SettingsPage() {
 
           {/* PWA Debug Panel */}
           {process.env.NODE_ENV === 'development' && (
-            <div className="group rounded-xl border bg-card hover:shadow-md transition-all duration-200 mb-6">
+            <div className="group rounded-xl border bg-card hover:shadow-md transition-all duration-200">
               <div className="p-6 space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-yellow-500/10">

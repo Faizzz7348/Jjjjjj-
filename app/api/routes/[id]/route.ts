@@ -55,11 +55,11 @@ export async function PUT(
             data: {
               code: loc.code,
               name: loc.location || loc.name,  // Accept either location or name
-              address: loc.address || loc.delivery || '',
+              address: loc.address || '',  // Don't use delivery field as fallback
               contact: loc.contact || '',
               notes: loc.notes || '',
               position: loc.no !== undefined ? loc.no : loc.position,  // Accept either no or position
-              deliveryMode: loc.deliveryMode,
+              deliveryMode: loc.deliveryMode || 'daily',
               lat: loc.lat,
               lng: loc.lng,
               active: loc.active !== undefined ? loc.active : true,
@@ -113,11 +113,11 @@ export async function PUT(
               routeId: id,
               code: loc.code,
               name: loc.location || loc.name,
-              address: loc.address || loc.delivery || '',
+              address: loc.address || '',  // Don't use delivery field as fallback
               contact: loc.contact || '',
               notes: loc.notes || '',
               position: loc.no !== undefined ? loc.no : loc.position,
-              deliveryMode: loc.deliveryMode || '',
+              deliveryMode: loc.deliveryMode || 'daily',
               lat: loc.lat || '',
               lng: loc.lng || '',
               active: loc.active !== undefined ? loc.active : true,
