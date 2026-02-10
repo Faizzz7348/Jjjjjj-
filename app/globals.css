@@ -76,22 +76,59 @@
     @apply border-border;
   }
   
+  /* CSS Variables for safe areas and dynamic viewport */
+  :root {
+    --sat: env(safe-area-inset-top);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+    --sar: env(safe-area-inset-right);
+    --vh: 1vh;
+  }
+  
   html {
     height: 100%;
+    height: 100dvh; /* Dynamic viewport height for mobile */
     overflow: hidden;
+    /* Fix for iOS Safari bounce */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    /* Prevent text size adjustment */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   
   body {
     @apply bg-background text-foreground;
     height: 100%;
+    height: 100dvh; /* Dynamic viewport height for mobile */
     overflow: hidden;
     position: fixed;
     width: 100%;
+    width: 100dvw; /* Dynamic viewport width */
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: contain;
+    /* Better font rendering on mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for safe areas */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
   
   #__next {
     height: 100%;
     overflow: hidden;
+  }
+  
+  /* Touch target improvements */
+  @media (pointer: coarse) {
+    button, a, input, select, textarea {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 }
 
@@ -112,9 +149,15 @@
     }
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar - hide on mobile, show on desktop */
   .overflow-y-auto::-webkit-scrollbar {
     width: 8px;
+  }
+  
+  @media (max-width: 768px) {
+    .overflow-y-auto::-webkit-scrollbar {
+      width: 4px;
+    }
   }
 
   .overflow-y-auto::-webkit-scrollbar-track {
@@ -134,6 +177,18 @@
   .overflow-y-auto {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    /* Prevent overscroll bounce */
+    overscroll-behavior: contain;
+  }
+  
+  /* Mobile-optimized scrolling */
+  @media (max-width: 768px) {
+    .overflow-y-auto {
+      /* Better momentum scrolling on iOS */
+      -webkit-overflow-scrolling: touch;
+      /* Reduce scroll snap on mobile */
+      scroll-snap-type: none;
+    }
   }
 
   /* Safe area padding for mobile notch */
@@ -143,6 +198,47 @@
 
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Touch-friendly interactions */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  
+  /* Prevent text selection on interactive elements */
+  button, a[role="button"], [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+  
+  /* Mobile-optimized active states */
+  @media (pointer: coarse) {
+    .active\\:scale-95:active {
+      transform: scale(0.95);
+    }
+  }
+  
+  /* Responsive container padding */
+  .container-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .container-padding {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  
+  /* Fix for iOS Safari address bar height change */
+  @supports (-webkit-touch-callout: none) {
+    .h-screen {
+      height: -webkit-fill-available;
+    }
   }
 
   /* Smooth transitions */
