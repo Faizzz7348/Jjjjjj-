@@ -108,28 +108,34 @@ export default function CalendarPage() {
     { 
       value: "month" as ViewMode, 
       label: "Month", 
-      icon: <Calendar className="h-4 w-4" />,
-      color: "bg-[#0a1929] hover:bg-[#0d1b2a] border border-[#1b263b]"
+      icon: <Calendar className="h-4 w-4" />
     },
     { 
       value: "week" as ViewMode, 
       label: "Week", 
-      icon: <CalendarRange className="h-4 w-4" />,
-      color: "bg-[#005f73] hover:bg-[#0a9396] border border-[#00b4d8]"
+      icon: <CalendarRange className="h-4 w-4" />
     },
     { 
       value: "day" as ViewMode, 
       label: "Day", 
-      icon: <CalendarDays className="h-4 w-4" />,
-      color: "bg-[#006494] hover:bg-[#0077be] border border-[#0096c7]"
+      icon: <CalendarDays className="h-4 w-4" />
     },
     { 
       value: "list" as ViewMode, 
       label: "List", 
-      icon: <List className="h-4 w-4" />,
-      color: "bg-[#023e8a] hover:bg-[#0353a4] border border-[#0077b6]"
+      icon: <List className="h-4 w-4" />
     },
   ]
+
+  const getViewButtonStyle = (view: ViewMode): string => {
+    const styles = {
+      month: "bg-[#0a1929] hover:bg-[#0d1b2a] border-[#1b263b]",
+      week: "bg-[#005f73] hover:bg-[#0a9396] border-[#00b4d8]",
+      day: "bg-[#006494] hover:bg-[#0077be] border-[#0096c7]",
+      list: "bg-[#023e8a] hover:bg-[#0353a4] border-[#0077b6]"
+    }
+    return styles[view]
+  }
 
   const cycleView = () => {
     const currentIndex = viewOptions.findIndex(opt => opt.value === viewMode)
@@ -164,15 +170,16 @@ export default function CalendarPage() {
           
           {/* Single View Mode Cycle Button */}
           <button
+            key={viewMode}
             onClick={cycleView}
             className={cn(
-              currentViewOption.color,
-              "text-white px-4 py-2 rounded-lg",
+              "text-white px-4 py-2 rounded-lg border",
               "flex items-center gap-2",
               "transition-all duration-200",
               "shadow-sm hover:shadow-md",
               "active:scale-95",
-              "text-sm font-medium"
+              "text-sm font-medium",
+              getViewButtonStyle(viewMode)
             )}
           >
             {currentViewOption.icon}
@@ -201,13 +208,13 @@ export default function CalendarPage() {
           <div className="rounded-xl border bg-card shadow-sm">
             {/* Calendar Header */}
             <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-2xl font-bold capitalize">{monthYear}</h2>
+              <h2 className="text-xl font-bold capitalize">{monthYear}</h2>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={goToToday}
-                  className="text-sm"
+                  className="text-xs px-2.5 py-1.5 h-8"
                 >
                   Hari Ini
                 </Button>
@@ -215,17 +222,17 @@ export default function CalendarPage() {
                   variant="outline"
                   size="icon"
                   onClick={goToPreviousMonth}
-                  className="h-9 w-9"
+                  className="h-8 w-8"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={goToNextMonth}
-                  className="h-9 w-9"
+                  className="h-8 w-8"
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
@@ -277,7 +284,7 @@ export default function CalendarPage() {
               }
               
               .fc .fc-toolbar-title {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
                 font-weight: 700;
                 color: hsl(var(--foreground));
               }
@@ -287,9 +294,10 @@ export default function CalendarPage() {
                 border: 1px solid hsl(var(--border));
                 color: hsl(var(--foreground));
                 text-transform: capitalize;
-                padding: 0.5rem 1rem;
+                padding: 0.375rem 0.75rem;
                 border-radius: 0.5rem;
                 font-weight: 500;
+                font-size: 0.8125rem;
                 box-shadow: none;
                 transition: all 0.2s ease;
               }
@@ -323,9 +331,9 @@ export default function CalendarPage() {
               
               .fc .fc-prev-button,
               .fc .fc-next-button {
-                padding: 0.5rem;
-                width: 2.5rem;
-                min-width: 2.5rem;
+                padding: 0.375rem;
+                width: 2rem;
+                min-width: 2rem;
               }
               
               /* Theme Standard Borders */
