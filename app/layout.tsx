@@ -11,21 +11,21 @@ import { PWADebugPanel } from "@/components/pwa-debug-panel"
 
 export const metadata: Metadata = {
   title: {
-    default: "My Awesome PWA",
-    template: "%s | My Awesome PWA"
+    default: "Route Manager",
+    template: "%s | Route Manager"
   },
-  description: "Progressive Web App paling terhebat dengan fitur lengkap - offline support, installable, push notifications",
-  keywords: ["PWA", "Progressive Web App", "Offline", "Mobile App", "Web App"],
-  authors: [{ name: "Your Name" }],
-  creator: "Your Name",
-  publisher: "Your Name",
-  applicationName: "My Awesome PWA",
+  description: "Aplikasi manajemen route delivery dengan fitur offline, QR code scanner, dan real-time tracking untuk Kuala Lumpur dan Selangor",
+  keywords: ["Route Manager", "Delivery", "Route Planning", "QR Scanner", "Offline App", "PWA"],
+  authors: [{ name: "Route Manager Team" }],
+  creator: "Route Manager Team",
+  publisher: "Route Manager Team",
+  applicationName: "Route Manager",
   generator: "Next.js",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Awesome PWA",
+    title: "Route Manager",
     startupImage: [
       {
         url: "/icons/icon-512x512.png",
@@ -40,30 +40,30 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "My Awesome PWA",
+    siteName: "Route Manager",
     title: {
-      default: "My Awesome PWA",
-      template: "%s | My Awesome PWA"
+      default: "Route Manager",
+      template: "%s | Route Manager"
     },
-    description: "Progressive Web App paling terhebat dengan fitur lengkap",
+    description: "Aplikasi manajemen route delivery dengan fitur offline, QR code scanner, dan real-time tracking",
     images: [
       {
         url: "/icons/icon-512x512.png",
         width: 512,
         height: 512,
-        alt: "My Awesome PWA"
+        alt: "Route Manager"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
     title: {
-      default: "My Awesome PWA",
-      template: "%s | My Awesome PWA"
+      default: "Route Manager",
+      template: "%s | Route Manager"
     },
-    description: "Progressive Web App paling terhebat dengan fitur lengkap",
+    description: "Aplikasi manajemen route delivery dengan fitur offline dan QR scanner",
     images: ["/icons/icon-512x512.png"],
-    creator: "@yourusername"
+    creator: "@routemanager"
   },
   icons: {
     icon: [

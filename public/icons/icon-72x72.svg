@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="72" height="72" fill="#000000"/>
-  <circle cx="36" cy="36" r="24" fill="white" opacity="0.1"/>
-  <path d="M20 32 L28 44 L52 24" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="50%" y="75%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold">PWA</text>
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="grad72" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="72" height="72" fill="url(#grad72)"/>
+  
+  <!-- Route path icon -->
+  <g transform="translate(10.799999999999999, 10.799999999999999)">
+    <!-- Starting point -->
+    <circle cx="10.799999999999999" cy="10.799999999999999" r="5.76" fill="#22c55e" opacity="0.9"/>
+    
+    <!-- Route line -->
+    <path d="M10.799999999999999 10.799999999999999 Q25.2 18 25.2 32.4" 
+          stroke="#3b82f6" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M25.2 32.4 Q25.2 46.800000000000004 39.6 46.800000000000004" 
+          stroke="#3b82f6" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    
+    <!-- Waypoints -->
+    <circle cx="25.2" cy="32.4" r="3.6" fill="#60a5fa" opacity="0.9"/>
+    
+    <!-- End point -->
+    <circle cx="39.6" cy="46.800000000000004" r="5.76" fill="#ef4444" opacity="0.9"/>
+  </g>
+  
+  <!-- Text label -->
+  <text x="50%" y="90%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="7.2" font-weight="bold" opacity="0.9">RM</text>
 </svg>
