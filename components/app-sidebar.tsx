@@ -46,42 +46,32 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 
-// Menu items.
+// Menu items - Simplified professional colors
 const items = [
   {
     title: "Home",
     url: "/home",
     icon: Home,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
   },
   {
     title: "Inbox",
     url: "/inbox",
     icon: Inbox,
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
   },
   {
     title: "Calendar",
     url: "/calendar",
     icon: Calendar,
-    color: "text-green-500",
-    bgColor: "bg-green-500/10",
   },
   {
     title: "Search",
     url: "/search",
     icon: Search,
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
   },
   {
     title: "Settings",
     url: "/settings",
     icon: Settings,
-    color: "text-gray-500",
-    bgColor: "bg-gray-500/10",
   },
 ]
 
@@ -90,8 +80,6 @@ const projects = [
     title: "Route List",
     url: "#",
     icon: MapPin,
-    color: "text-pink-500",
-    bgColor: "bg-pink-500/10",
     items: [
       {
         title: "Selangor",
@@ -109,8 +97,6 @@ const projects = [
     title: "Plano",
     url: "#",
     icon: Sparkles,
-    color: "text-cyan-500",
-    bgColor: "bg-cyan-500/10",
     items: [
       {
         title: "Standard",
@@ -151,17 +137,18 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="h-full border-r">
-      <SidebarHeader className="p-4 border-b">
+      {/* Header - Clean & Simple */}
+      <SidebarHeader className="p-4 border-b bg-muted/30">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild className="hover:bg-accent/50 transition-colors">
-              <a href="#">
-                <div className="flex aspect-square size-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30">
-                  <Home className="size-5" />
+            <SidebarMenuButton size="lg" asChild className="hover:bg-accent transition-colors">
+              <a href="#" className="flex items-center gap-3">
+                <div className="flex aspect-square size-9 items-center justify-center rounded-lg bg-primary/90 text-primary-foreground">
+                  <Home className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-bold text-base">VMRF System</span>
-                  <span className="text-xs text-muted-foreground font-medium">v1.0.0</span>
+                  <span className="font-semibold text-sm">VMRF System</span>
+                  <span className="text-[10px] text-muted-foreground">v1.0.0</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -169,21 +156,23 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent className="overflow-y-auto px-3">
+      <SidebarContent className="overflow-y-auto px-2 py-3">
+        {/* Main Navigation */}
         <SidebarGroup>
-          <SidebarGroupLabel className="px-3 py-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Navigation
+          <SidebarGroupLabel className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+            Main
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
+            <SidebarMenu className="gap-0.5 mt-1">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="group hover:bg-accent/50 transition-all duration-200 rounded-lg">
+                  <SidebarMenuButton 
+                    asChild 
+                    className="h-9 hover:bg-accent transition-colors"
+                  >
                     <Link href={item.url} className="flex items-center gap-3">
-                      <div className={cn("p-1.5 rounded-md transition-colors", item.bgColor)}>
-                        <item.icon className={cn("h-4 w-4", item.color)} />
-                      </div>
-                      <span className="text-sm font-medium group-hover:translate-x-0.5 transition-transform">{item.title}</span>
+                      <item.icon className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -192,14 +181,16 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarSeparator className="my-4 bg-gradient-to-r from-transparent via-border to-transparent" />
+        {/* Separator */}
+        <SidebarSeparator className="my-3" />
 
+        {/* Projects Section */}
         <SidebarGroup>
-          <SidebarGroupLabel className="px-3 py-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Vending Machines
+          <SidebarGroupLabel className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+            Workspaces
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
+            <SidebarMenu className="gap-0.5 mt-1">
               {projects.map((project) => (
                 <SidebarMenuItem key={project.title}>
                   <SidebarMenuButton 
@@ -207,25 +198,23 @@ export function AppSidebar() {
                       e.preventDefault()
                       toggleMenu(project.title)
                     }}
-                    className="group cursor-pointer hover:bg-accent/50 transition-all duration-200 rounded-lg"
+                    className="h-9 cursor-pointer hover:bg-accent transition-colors"
                   >
-                    <div className={cn("p-1.5 rounded-md transition-colors", project.bgColor)}>
-                      <project.icon className={cn("h-4 w-4", project.color)} />
-                    </div>
-                    <span className="text-sm font-medium group-hover:translate-x-0.5 transition-transform">{project.title}</span>
+                    <project.icon className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">{project.title}</span>
                     {project.items?.length ? (
                       <div className="ml-auto">
                         {openMenus[project.title] ? (
-                          <ChevronUp className="h-4 w-4 text-muted-foreground transition-transform" />
+                          <ChevronUp className="h-3.5 w-3.5 text-muted-foreground transition-transform duration-200" />
                         ) : (
-                          <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform" />
+                          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground transition-transform duration-200" />
                         )}
                       </div>
                     ) : null}
                   </SidebarMenuButton>
                   <div 
                     className={cn(
-                      "grid transition-all duration-300 ease-in-out",
+                      "grid transition-all duration-200 ease-out",
                       openMenus[project.title] 
                         ? 'grid-rows-[1fr] opacity-100' 
                         : 'grid-rows-[0fr] opacity-0'
@@ -233,19 +222,19 @@ export function AppSidebar() {
                   >
                     <div className="overflow-hidden">
                       {project.items?.length ? (
-                        <SidebarMenuSub className="py-1 px-2 ml-3 border-l-2 border-primary/20">
+                        <SidebarMenuSub className="py-1 px-2 ml-5 border-l border-border/50">
                           {project.items.map((item) => (
                             <SidebarMenuSubItem key={item.title}>
                               <SidebarMenuSubButton 
                                 asChild 
-                                className="group hover:bg-primary/10 hover:text-primary transition-all duration-200 rounded-md"
+                                className="h-8 hover:bg-accent/50 transition-colors"
                               >
                                 <Link href={item.url} className="flex items-center justify-between">
-                                  <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+                                  <span className="text-sm">
                                     {item.title}
                                   </span>
                                   {item.badge && (
-                                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-primary/20 text-primary">
+                                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
                                       {item.badge}
                                     </span>
                                   )}
@@ -264,41 +253,42 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-3 border-t mt-auto">
+      {/* Footer - Clean User Section */}
+      <SidebarFooter className="p-2 border-t mt-auto">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="group hover:bg-accent/50 transition-all duration-200 rounded-lg">
-                  <div className="flex items-center gap-3 flex-1">
-                    <div className="p-1.5 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 shadow-lg shadow-orange-500/30">
-                      <User2 className="h-4 w-4 text-white" />
+                <SidebarMenuButton className="h-12 hover:bg-accent transition-colors">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+                      <User2 className="h-4 w-4" />
                     </div>
                     <div className="flex flex-col items-start flex-1 min-w-0">
-                      <span className="text-sm font-semibold truncate">Admin User</span>
-                      <span className="text-xs text-muted-foreground truncate">admin@vmrf.com</span>
+                      <span className="text-sm font-medium truncate">Admin User</span>
+                      <span className="text-[10px] text-muted-foreground truncate">admin@vmrf.com</span>
                     </div>
+                    <ChevronUp className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
                   </div>
-                  <ChevronUp className="h-4 w-4 text-muted-foreground ml-2" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 side="top"
                 align="end"
-                className="w-[240px]"
+                className="w-56"
               >
-                <DropdownMenuLabel className="font-bold">My Account</DropdownMenuLabel>
+                <DropdownMenuLabel className="font-medium">Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="gap-2">
+                <DropdownMenuItem className="gap-2 cursor-pointer">
                   <UserCircle className="h-4 w-4" />
-                  <span>Profile Settings</span>
+                  <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="gap-2">
+                <DropdownMenuItem className="gap-2 cursor-pointer">
                   <CreditCard className="h-4 w-4" />
                   <span>Billing</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="gap-2 text-destructive focus:text-destructive">
+                <DropdownMenuItem className="gap-2 text-destructive focus:text-destructive cursor-pointer">
                   <LogOut className="h-4 w-4" />
                   <span>Sign out</span>
                 </DropdownMenuItem>

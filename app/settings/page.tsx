@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PageLayout } from "@/components/page-layout"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Switch } from "@/components/ui/switch"
 import { useLanguage } from "@/contexts/language-context"
 import { Button } from "@/components/ui/button"
+import PWAUtils from "@/lib/pwa-utils"
 import { 
   Languages, 
   User, 
@@ -17,12 +18,77 @@ import {
   Shield, 
   Key, 
   ShieldCheck,
-  Settings
+  Zap,
+  Smartphone,
+  Wifi,
+  HardDrive,
+  CheckCircle2,
+  XCircle,
+  Trash2,
+  Download,
+  RefreshCw
 } from "lucide-react"
 
 export default function SettingsPage() {
   const { language, setLanguage, t } = useLanguage()
   const [notifications, setNotifications] = useState(true)
+  const [pwaInfo, setPwaInfo] = useState({
+    isInstalled: false,
+    displayMode: 'browser' as string,
+    isOnline: true,
+    platform: '',
+    storage: null as any,
+    connection: null as any,
+    readiness: null as any
+  })
+
+  // Update PWA info
+  useEffect(() => {
+    const updateInfo = async () => {
+      const storage = await PWAUtils.getStorageEstimate()
+      const readiness = await PWAUtils.checkPWAReadiness()
+      
+      setPwaInfo({
+        isInstalled: PWAUtils.isInstalled(),
+        displayMode: PWAUtils.getDisplayMode(),
+        isOnline: PWAUtils.isOnline(),
+        platform: PWAUtils.isIOS() ? 'iOS' : PWAUtils.isAndroid() ? 'Android' : 'Desktop',
+        storage,
+        connection: PWAUtils.getConnectionInfo(),
+        readiness
+      })
+    }
+
+    updateInfo()
+
+    // Update online status
+    const handleOnlineStatus = () => updateInfo()
+    window.addEventListener('online', handleOnlineStatus)
+    window.addEventListener('offline', handleOnlineStatus)
+
+    // Refresh every 5 seconds
+    const interval = setInterval(updateInfo, 5000)
+
+    return () => {
+      window.removeEventListener('online', handleOnlineStatus)
+      window.removeEventListener('offline', handleOnlineStatus)
+      clearInterval(interval)
+    }
+  }, [])
+
+  const handleClearCache = async () => {
+    if (confirm('Clear all caches? This will remove all offline data.')) {
+      await PWAUtils.clearAllCaches()
+      window.location.reload()
+    }
+  }
+
+  const handleUnregisterSW = async () => {
+    if (confirm('Unregister service workers? This will disable offline functionality.')) {
+      await PWAUtils.unregisterServiceWorkers()
+      window.location.reload()
+    }
+  }
 
   return (
     <PageLayout>
@@ -39,19 +105,6 @@ export default function SettingsPage() {
 
       {/* Content */}
       <div className="flex flex-col gap-6 p-6 max-w-4xl mx-auto">
-        {/* Page Header */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Settings className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">{t('settingsTitle')}</h1>
-              <p className="text-muted-foreground">Customize your experience</p>
-            </div>
-          </div>
-        </div>
-
         <div className="space-y-4">
           {/* Language Settings */}
           <div className="group rounded-xl border bg-card hover:shadow-md transition-all duration-200">
@@ -203,6 +256,191 @@ export default function SettingsPage() {
               </div>
             </div>
           </div>
+
+          {/* PWA Debug Panel */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="group rounded-xl border bg-card hover:shadow-md transition-all duration-200 mb-6">
+              <div className="p-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-yellow-500/10">
+                    <Zap className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">PWA Debug Panel</h3>
+                    <p className="text-sm text-muted-foreground">Development tools and diagnostics</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Installation Status */}
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Smartphone className="h-4 w-4 text-muted-foreground" />
+                      <h4 className="font-semibold text-sm">Installation</h4>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Installed:</span>
+                        <span className="flex items-center gap-1 font-medium">
+                          {pwaInfo.isInstalled ? (
+                            <><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Yes</>
+                          ) : (
+                            <><XCircle className="h-3.5 w-3.5 text-red-500" /> No</>
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Display Mode:</span>
+                        <span className="font-mono text-xs">{pwaInfo.displayMode}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Platform:</span>
+                        <span className="font-medium">{pwaInfo.platform}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Can Install:</span>
+                        <span className="flex items-center gap-1 font-medium">
+                          {PWAUtils.canInstall() ? (
+                            <><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Yes</>
+                          ) : (
+                            <><XCircle className="h-3.5 w-3.5 text-yellow-500" /> No</>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Network Status */}
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Wifi className="h-4 w-4 text-muted-foreground" />
+                      <h4 className="font-semibold text-sm">Network</h4>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Status:</span>
+                        <span className="flex items-center gap-1 font-medium">
+                          {pwaInfo.isOnline ? (
+                            <><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Online</>
+                          ) : (
+                            <><XCircle className="h-3.5 w-3.5 text-red-500" /> Offline</>
+                          )}
+                        </span>
+                      </div>
+                      {pwaInfo.connection && (
+                        <>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Type:</span>
+                            <span className="font-mono text-xs">{pwaInfo.connection.effectiveType}</span>
+                          </div>
+                          {pwaInfo.connection.downlink && (
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Speed:</span>
+                              <span className="font-medium">{pwaInfo.connection.downlink} Mbps</span>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Storage */}
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <div className="flex items-center gap-2 mb-3">
+                      <HardDrive className="h-4 w-4 text-muted-foreground" />
+                      <h4 className="font-semibold text-sm">Storage</h4>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      {pwaInfo.storage ? (
+                        <>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Used:</span>
+                            <span className="font-medium">{PWAUtils.formatBytes(pwaInfo.storage.usage || 0)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Quota:</span>
+                            <span className="font-medium">{PWAUtils.formatBytes(pwaInfo.storage.quota || 0)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Usage:</span>
+                            <span className="font-medium">{pwaInfo.storage.usagePercent?.toFixed(2)}%</span>
+                          </div>
+                        </>
+                      ) : (
+                        <p className="text-muted-foreground text-xs">Storage API not available</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* PWA Readiness */}
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <div className="flex items-center gap-2 mb-3">
+                      <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+                      <h4 className="font-semibold text-sm">PWA Readiness</h4>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      {pwaInfo.readiness && (
+                        <>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">HTTPS:</span>
+                            <span className="flex items-center gap-1 font-medium">
+                              {pwaInfo.readiness.isHTTPS ? (
+                                <><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Yes</>
+                              ) : (
+                                <><XCircle className="h-3.5 w-3.5 text-red-500" /> No</>
+                              )}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Manifest:</span>
+                            <span className="flex items-center gap-1 font-medium">
+                              {pwaInfo.readiness.hasManifest ? (
+                                <><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Yes</>
+                              ) : (
+                                <><XCircle className="h-3.5 w-3.5 text-red-500" /> No</>
+                              )}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Service Worker:</span>
+                            <span className="flex items-center gap-1 font-medium">
+                              {pwaInfo.readiness.hasServiceWorker ? (
+                                <><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Yes</>
+                              ) : (
+                                <><XCircle className="h-3.5 w-3.5 text-red-500" /> No</>
+                              )}
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={handleClearCache}
+                      className="flex-1"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                      Clear Cache
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={handleUnregisterSW}
+                      className="flex-1"
+                    >
+                      <Download className="h-3.5 w-3.5 mr-1.5" />
+                      Unregister SW
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </PageLayout>

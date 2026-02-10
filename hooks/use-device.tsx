@@ -16,9 +16,11 @@ export interface DeviceInfo {
   viewportWidth: number
   safeAreaTop: number
   safeAreaBottom: number
+  isClient: boolean
 }
 
 export function useDevice(): DeviceInfo {
+  const [isClient, setIsClient] = useState(false)
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>({
     type: "desktop",
     orientation: "landscape",
@@ -26,13 +28,17 @@ export function useDevice(): DeviceInfo {
     isTablet: false,
     isDesktop: true,
     isTouchDevice: false,
-    viewportHeight: typeof window !== "undefined" ? window.innerHeight : 0,
-    viewportWidth: typeof window !== "undefined" ? window.innerWidth : 0,
+    viewportHeight: 0,
+    viewportWidth: 0,
     safeAreaTop: 0,
     safeAreaBottom: 0,
+    isClient: false,
   })
 
   useEffect(() => {
+    // Mark as client-side
+    setIsClient(true)
+    
     const updateDeviceInfo = () => {
       const width = window.innerWidth
       const height = window.innerHeight
@@ -66,6 +72,7 @@ export function useDevice(): DeviceInfo {
         viewportWidth: width,
         safeAreaTop: getSafeAreaValue("--sat") || 0,
         safeAreaBottom: getSafeAreaValue("--sab") || 0,
+        isClient: true,
       })
     }
 
@@ -90,6 +97,27 @@ export function useDevice(): DeviceInfo {
 export function useResponsiveHeight() {
   const device = useDevice()
   
+  // During SSR or before client hydration, use desktop defaults to prevent mismatch
+  // After hydration, use actual device-specific values
+  if (!device.isClient) {
+    return {
+      header: "h-16",
+      headerPx: 64,
+      button: "h-10",
+      input: "h-11",
+      padding: "p-6",
+      paddingX: "px-6",
+      paddingY: "py-6",
+      gap: "gap-4",
+      text: {
+        title: "text-xl",
+        heading: "text-3xl",
+        body: "text-base",
+      },
+      isClient: false,
+    }
+  }
+  
   return {
     header: device.isMobile ? "h-14" : "h-16",
     headerPx: device.isMobile ? 56 : 64,
@@ -103,6 +131,7 @@ export function useResponsiveHeight() {
       title: device.isMobile ? "text-lg" : "text-xl",
       heading: device.isMobile ? "text-2xl" : "text-3xl",
       body: device.isMobile ? "text-sm" : "text-base",
-    }
+    },
+    isClient: true,
   }
 }

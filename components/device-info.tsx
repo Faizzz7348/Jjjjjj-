@@ -1,6 +1,6 @@
 "use client"
 
-import { useDevice, useResponsiveHeight } from "@/hooks/use-device"
+import { useDevice } from "@/hooks/use-device"
 import { Card } from "@/components/ui/card"
 import { useState } from "react"
 import { X, Smartphone } from "lucide-react"
@@ -21,7 +21,6 @@ import { Button } from "@/components/ui/button"
 export function DeviceInfo() {
   const [isOpen, setIsOpen] = useState(false)
   const device = useDevice()
-  const responsive = useResponsiveHeight()
 
   if (!isOpen) {
     return (
@@ -96,15 +95,15 @@ export function DeviceInfo() {
           </div>
         </div>
 
-        {/* Responsive Classes */}
+        {/* CSS Recommendations */}
         <div className="p-2 bg-muted rounded">
-          <div className="font-semibold mb-1">Responsive Classes</div>
+          <div className="font-semibold mb-1">Recommended CSS Classes</div>
           <div className="space-y-1 font-mono text-[10px]">
-            <div>header: {responsive.header}</div>
-            <div>button: {responsive.button}</div>
-            <div>padding: {responsive.padding}</div>
-            <div>gap: {responsive.gap}</div>
-            <div>title: {responsive.text.title}</div>
+            <div>Header: h-14 md:h-16</div>
+            <div>Button: h-9 md:h-10</div>
+            <div>Padding: p-4 md:p-6</div>
+            <div>Gap: gap-3 md:gap-4</div>
+            <div>Title: text-lg md:text-xl</div>
           </div>
         </div>
 

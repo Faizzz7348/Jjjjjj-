@@ -7,7 +7,6 @@ import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
 import { PWAUpdatePrompt } from "@/components/pwa-update-prompt"
 import { PWAPushNotification } from "@/components/pwa-push-notification"
 import { PWAOfflineIndicator } from "@/components/pwa-offline-indicator"
-import { PWADebugPanel } from "@/components/pwa-debug-panel"
 
 export const metadata: Metadata = {
   title: {
@@ -99,10 +98,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  minimumScale: 1,
   userScalable: true,
   viewportFit: "cover",
-  interactiveWidget: "resizes-content",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#000000" }
@@ -154,7 +151,6 @@ export default function RootLayout({
             <PWAUpdatePrompt />
             <PWAInstallPrompt />
             <PWAPushNotification />
-            <PWADebugPanel />
             {children}
           </ToastProvider>
         </LanguageProvider>

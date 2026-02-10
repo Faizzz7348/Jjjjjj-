@@ -6,17 +6,75 @@ Sistem responsive design yang comprehensive untuk memastikan app berfungsi denga
 
 ## 🎯 Key Features
 
-- **Device-aware viewport handling** - Auto-detect device type dan adjust
+- **CSS-first responsive design** - Media queries untuk avoid hydration issues
+- **Device-aware hooks** - Optional JavaScript detection untuk advanced features
 - **Dynamic height calculations** - 100dvh untuk mobile safari support
 - **Safe area support** - Handle notched devices (iPhone X+)
 - **Touch-optimized** - Proper touch targets dan interactions
-- **Responsive utilities** - Hooks untuk consistent responsive behavior
+
+## ⚠️ Important: Avoiding Hydration Issues
+
+**ALWAYS use Tailwind CSS media queries** untuk responsive styling yang berubah antara device types. Ini prevent hydration mismatch antara server dan client rendering.
+
+### ✅ CORRECT - Use CSS Media Queries:
+```tsx
+// Use Tailwind responsive classes - no hydration issues
+<div className="h-14 md:h-16 px-4 md:px-6">
+  <h1 className="text-lg md:text-xl">Title</h1>
+</div>
+```
+
+### ❌ WRONG - Using JavaScript hooks for styling:
+```tsx
+// This causes hydration mismatch!
+const responsive = useResponsiveHeight()
+<div className={responsive.header}>  // ❌ Different on server vs client
+  <h1 className={responsive.text.title}>Title</h1>
+</div>
+```
 
 ## 🔧 Usage
 
-### 1. Using `useDevice()` Hook
+### 1. Primary Method: Tailwind Responsive Classes
 
-Hook ini provide comprehensive device information:
+Gunakan Tailwind's built-in responsive modifiers:
+
+### 1. Primary Method: Tailwind Responsive Classes
+
+Gunakan Tailwind's built-in responsive modifiers:
+
+```tsx
+export default function MyPage() {
+  return (
+    <div>
+      {/* Responsive heights */}
+      <header className="h-14 md:h-16">
+        {/* Responsive padding */}
+        <div className="px-4 md:px-6 py-3 md:py-4">
+          {/* Responsive text sizes */}
+          <h1 className="text-lg md:text-xl lg:text-2xl">Title</h1>
+          <p className="text-sm md:text-base">Description</p>
+        </div>
+      </header>
+      
+      {/* Responsive button */}
+      <button className="h-9 md:h-10 px-3 md:px-4 text-sm md:text-base">
+        Click Me
+      </button>
+    </div>
+  )
+}
+```
+
+**Common Responsive Patterns:**
+- Heights: `h-14 md:h-16` (mobile: 56px, desktop: 64px)
+- Padding: `p-4 md:p-6` (mobile: 1rem, desktop: 1.5rem)
+- Text: `text-sm md:text-base` (mobile: 14px, desktop: 16px)
+- Gaps: `gap-3 md:gap-4` (mobile: 0.75rem, desktop: 1rem)
+
+### 2. Optional: useDevice() Hook (For Logic Only)
+
+**ONLY use for conditional logic**, bukan untuk styling:
 
 ```tsx
 import { useDevice } from "@/hooks/use-device"
@@ -24,68 +82,32 @@ import { useDevice } from "@/hooks/use-device"
 export default function MyPage() {
   const device = useDevice()
   
-  return (
-    <div>
-      <p>Device Type: {device.type}</p>
-      <p>Is Mobile: {device.isMobile ? 'Yes' : 'No'}</p>
-      <p>Viewport Height: {device.viewportHeight}px</p>
-      <p>Safe Area Top: {device.safeAreaTop}px</p>
-    </div>
-  )
+  // ✅ CORRECT - Use for conditional logic
+  useEffect(() => {
+    if (device.isMobile && device.isClient) {
+      // Do something only on mobile
+      enableMobileGestures()
+    }
+  }, [device.isMobile, device.isClient])
+  
+  // ❌ WRONG - Don't use for styling
+  // return <div className={device.isMobile ? "h-14" : "h-16"}>
+  
+  // ✅ CORRECT - Use CSS media queries
+  return <div className="h-14 md:h-16">
+    <p>Device Type: {device.isClient ? device.type : 'loading...'}</p>
+  </div>
 }
 ```
 
 **Device Info Properties:**
 - `type`: "mobile" | "tablet" | "desktop"
 - `orientation`: "portrait" | "landscape"
-- `isMobile`: boolean
-- `isTablet`: boolean
-- `isDesktop`: boolean
+- `isMobile`, `isTablet`, `isDesktop`: boolean
 - `isTouchDevice`: boolean
-- `viewportHeight`: number
-- `viewportWidth`: number
-- `safeAreaTop`: number
-- `safeAreaBottom`: number
-
-### 2. Using `useResponsiveHeight()` Hook
-
-Hook ini provide responsive class names untuk consistent sizing:
-
-```tsx
-import { useResponsiveHeight } from "@/hooks/use-device"
-
-export default function MyPage() {
-  const responsive = useResponsiveHeight()
-  
-  return (
-    <div>
-      {/* Header dengan height responsive */}
-      <header className={`${responsive.header} flex items-center`}>
-        <h1 className={responsive.text.title}>Title</h1>
-      </header>
-      
-      {/* Content dengan padding responsive */}
-      <main className={responsive.padding}>
-        <h2 className={responsive.text.heading}>Heading</h2>
-        <button className={responsive.button}>Click Me</button>
-      </main>
-    </div>
-  )
-}
-```
-
-**Responsive Properties:**
-- `header`: "h-14" (mobile) | "h-16" (desktop)
-- `headerPx`: 56 (mobile) | 64 (desktop)
-- `button`: "h-9" (mobile) | "h-10" (desktop)
-- `input`: "h-10" (mobile) | "h-11" (desktop)
-- `padding`: "p-4" (mobile) | "p-6" (desktop)
-- `paddingX`: "px-4" (mobile) | "px-6" (desktop)
-- `paddingY`: "py-4" (mobile) | "py-6" (desktop)
-- `gap`: "gap-3" (mobile) | "gap-4" (desktop)
-- `text.title`: "text-lg" (mobile) | "text-xl" (desktop)
-- `text.heading`: "text-2xl" (mobile) | "text-3xl" (desktop)
-- `text.body`: "text-sm" (mobile) | "text-base" (desktop)
+- `viewportHeight`, `viewportWidth`: number
+- `safeAreaTop`, `safeAreaBottom`: number  
+- `isClient`: boolean (true after hydration)
 
 ## 📏 Breakpoints
 
@@ -172,16 +194,43 @@ Semua interactive elements automatically minimum 44x44px on touch devices:
 </div>
 ```
 
-### After (Responsive):
+### After (Responsive with Media Queries):
 ```tsx
-const responsive = useResponsiveHeight()
+<div className="h-14 md:h-16 px-4 md:px-6 gap-3 md:gap-4">
+  <h1 className="text-lg md:text-xl">Title</h1>
+</div>
+```
 
-<div className={`${responsive.header} ${responsive.paddingX} ${responsive.gap}`}>
+### ❌ DON'T Use Hooks for Styling (Causes Hydration Issues):
+```tsx
+// This will cause hydration mismatch!
+const responsive = useResponsiveHeight()
+<div className={`${responsive.header} ${responsive.paddingX}`}>
   <h1 className={responsive.text.title}>Title</h1>
 </div>
 ```
 
+### ✅ DO Use Tailwind Responsive Classes:
+```tsx
+// This works perfectly - no hydration issues
+<div className="h-14 md:h-16 px-4 md:px-6">
+  <h1 className="text-lg md:text-xl">Title</h1>
+</div>
+```
+
 ## 🐛 Common Issues & Solutions
+
+### Issue: Hydration mismatch error
+**Cause:** Using JavaScript hooks untuk styling yang berbeza antara server dan client
+**Solution:** Use Tailwind CSS media queries instead
+```tsx
+// ❌ Wrong - causes hydration mismatch
+const responsive = useResponsiveHeight()
+<div className={responsive.header}>
+
+// ✅ Correct - no hydration issues
+<div className="h-14 md:h-16">
+```
 
 ### Issue: Content cut off on mobile
 **Solution:** Ensure proper viewport units and overflow handling
@@ -198,7 +247,7 @@ const responsive = useResponsiveHeight()
   <div className="overflow-y-auto">content</div>
 </PageLayout>
 
-// ✓ Correct
+// ✅ Correct
 <PageLayout>
   <div>content</div>
 </PageLayout>
@@ -210,6 +259,18 @@ const responsive = useResponsiveHeight()
 // Safe areas handled by body padding
 // For specific needs:
 <div className="safe-top">Header content</div>
+```
+
+### Issue: Device detection not working
+**Solution:** Always check `isClient` before using device values
+```tsx
+const device = useDevice()
+
+// ❌ Wrong - might be undefined during SSR
+if (device.isMobile) { ... }
+
+// ✅ Correct - check isClient first
+if (device.isClient && device.isMobile) { ... }
 ```
 
 ## 📊 Testing
@@ -228,12 +289,34 @@ Use browser DevTools responsive mode and test:
 
 ## 🚀 Best Practices
 
-1. **Always use responsive hooks** for sizing
-2. **Test on real devices** - simulators may not show all issues
-3. **Avoid fixed pixel heights** - use responsive utilities
-4. **Use proper touch targets** - minimum 44x44px
-5. **Handle safe areas** - especially for fixed position elements
-6. **Test both orientations** on mobile devices
+1. **ALWAYS use Tailwind media queries for styling** - Prevents hydration issues
+2. **Use useDevice() only for logic** - Not for className generation
+3. **Check `isClient` before using device values** - Ensure safe SSR
+4. **Test on real devices** - Simulators may not show all issues
+5. **Use proper touch targets** - Minimum 44x44px on touch devices
+6. **Handle safe areas** - Especially for fixed position elements
+7. **Test both orientations** on mobile devices
+8. **Avoid fixed pixel heights** - Use responsive Tailwind classes
+
+### Quick Reference for Common Patterns
+
+```tsx
+// ✅ Headers
+<header className="h-14 md:h-16 px-4 md:px-6">
+
+// ✅ Buttons  
+<button className="h-9 md:h-10 px-3 md:px-4 text-sm md:text-base">
+
+// ✅ Cards
+<div className="p-4 md:p-6 gap-3 md:gap-4">
+
+// ✅ Text
+<h1 className="text-lg md:text-xl lg:text-2xl">
+<p className="text-sm md:text-base">
+
+// ✅ Touch interactions
+<button className="active:scale-95 touch-manipulation">
+```
 
 ## 📚 Example Page
 
