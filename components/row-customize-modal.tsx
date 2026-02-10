@@ -379,7 +379,7 @@ export function RowCustomizeModal<T extends { id: string; code: string; location
             </thead>
             <tbody>
               {displaySortConfig.map((config) => {
-                const rowInfo = getRowInfo(config.id)
+                const rowInfo = rows.find(r => r.id === config.id)
                 const originalOrder = getOriginalOrder(config.id)
                 if (!rowInfo) return null
 
