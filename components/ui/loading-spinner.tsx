@@ -25,7 +25,7 @@ export function LoadingSpinner({ size = "md", className }: LoadingSpinnerProps) 
 
 export function LoadingPage() {
   return (
-    <div className="flex h-screen w-full items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <LoadingSpinner size="lg" />
         <LoadingText />

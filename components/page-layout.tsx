@@ -22,7 +22,7 @@ export function PageLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
       <SidebarProvider defaultOpen={false}>
-        <div className="relative flex flex-col w-full" style={{ height: '100dvh' }}>
+        <div className="relative flex flex-col w-full h-full">
           {/* Main content - scrollable */}
           <div className="flex-1 w-full overflow-y-auto overflow-x-hidden page-transition">{children}</div>
           
