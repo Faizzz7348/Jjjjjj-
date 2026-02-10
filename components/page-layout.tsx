@@ -22,9 +22,9 @@ export function PageLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
       <SidebarProvider defaultOpen={false}>
-        <div className="relative min-h-screen w-full">
-          {/* Main content */}
-          <div className="w-full min-h-screen page-transition">{children}</div>
+        <div className="relative flex flex-col h-screen w-full overflow-hidden">
+          {/* Main content - scrollable */}
+          <div className="flex-1 w-full overflow-y-auto overflow-x-hidden page-transition">{children}</div>
           
           {/* Overlay backdrop */}
           <SidebarOverlay />
