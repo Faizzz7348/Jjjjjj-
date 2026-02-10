@@ -1,6 +1,6 @@
 import { Route, Location, DeliveryMode, QrCodeImage } from '@/types/route'
 
-export { Route, Location, DeliveryMode, QrCodeImage }
+export type { Route, Location, DeliveryMode, QrCodeImage }
 
 export const initialRoutes: Route[] = [
   {
