@@ -49,10 +49,10 @@ export async function PUT(
       // Update or create locations
       for (const loc of locations) {
         if (loc.id) {
-          // Update existing location
-          await prisma.location.update({
+          // Use upsert to handle cases where location might not exist
+          await prisma.location.upsert({
             where: { id: loc.id },
-            data: {
+            update: {
               code: loc.code,
               name: loc.location || loc.name,  // Accept either location or name
               address: loc.address || '',  // Don't use delivery field as fallback
@@ -62,6 +62,20 @@ export async function PUT(
               deliveryMode: loc.deliveryMode || 'daily',
               lat: loc.lat,
               lng: loc.lng,
+              active: loc.active !== undefined ? loc.active : true,
+            } as any,
+            create: {
+              id: loc.id,
+              routeId: id,
+              code: loc.code,
+              name: loc.location || loc.name,
+              address: loc.address || '',
+              contact: loc.contact || '',
+              notes: loc.notes || '',
+              position: loc.no !== undefined ? loc.no : loc.position,
+              deliveryMode: loc.deliveryMode || 'daily',
+              lat: loc.lat || '',
+              lng: loc.lng || '',
               active: loc.active !== undefined ? loc.active : true,
             } as any
           })
