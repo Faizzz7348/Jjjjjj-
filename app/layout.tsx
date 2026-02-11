@@ -144,7 +144,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-dvh overflow-hidden">
+      <body className="h-dvh">
         <LanguageProvider>
           <ToastProvider>
             <PWAOfflineIndicator />
