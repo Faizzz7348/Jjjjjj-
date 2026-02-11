@@ -1,4 +1,11 @@
-# Quick Icon Generation Guide
+git add .
+git commit -m "fix: force enable PWA desktop input editing - v0.1.1
+
+- Added CSS to force enable user-select, pointer-events on inputs
+- Bumped version to 0.1.1 for cache refresh
+- Updated gitignore for PWA generated files"
+
+git push# Quick Icon Generation Guide
 
 ## Fastest Method (Recommended)
 

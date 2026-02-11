@@ -9,6 +9,15 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Force enable input/select in PWA desktop */
+  input, select, textarea {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    user-select: text !important;
+    pointer-events: auto !important;
+    -webkit-touch-callout: default !important;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;

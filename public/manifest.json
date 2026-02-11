@@ -2,6 +2,7 @@
   "name": "Route Manager",
   "short_name": "RouteManager",
   "description": "Aplikasi manajemen route delivery dengan fitur offline, QR code scanner, dan real-time tracking",
+  "version": "0.1.1",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
