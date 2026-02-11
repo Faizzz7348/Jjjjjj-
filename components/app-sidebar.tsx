@@ -136,7 +136,7 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar className="h-full border-r">
+    <Sidebar className="h-full border-r mt-6">
       {/* Header - Clean & Simple */}
       <SidebarHeader className="p-4 border-b bg-muted/30">
         <SidebarMenu>
