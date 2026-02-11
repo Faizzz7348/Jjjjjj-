@@ -11,6 +11,18 @@ export async function PUT(
     const body = await request.json()
     const { code, location, name, delivery, address, contact, notes, no, position, deliveryMode, lat, lng, active, deliverySchedule, qrCodeImages } = body
 
+    // Check if location exists
+    const existingLocation = await prisma.location.findUnique({
+      where: { id }
+    })
+
+    if (!existingLocation) {
+      return NextResponse.json(
+        { error: 'Location not found' },
+        { status: 404 }
+      )
+    }
+
     // Update location
     await prisma.location.update({
       where: { id },
@@ -97,6 +109,18 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
+
+    // Check if location exists
+    const existingLocation = await prisma.location.findUnique({
+      where: { id }
+    })
+
+    if (!existingLocation) {
+      return NextResponse.json(
+        { error: 'Location not found' },
+        { status: 404 }
+      )
+    }
 
     await prisma.location.delete({
       where: { id }
