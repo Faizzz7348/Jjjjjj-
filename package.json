@@ -12,11 +12,7 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:seed": "tsx prisma/seed.ts",
-    "pwa:icons": "node scripts/generate-icons.js",
-    "pwa:build": "npm run build",
-    "pwa:serve": "npm run build && npm start",
-    "analyze": "ANALYZE=true npm run build"
+    "db:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.20",
@@ -40,7 +36,6 @@
     "lightgallery": "^2.7.2",
     "lucide-react": "^0.344.0",
     "next": "^15.1.6",
-    "next-pwa": "^5.6.0",
     "prisma": "^5.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
