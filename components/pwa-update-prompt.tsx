@@ -10,29 +10,42 @@ export function PWAUpdatePrompt() {
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then((registration) => {
-        registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('✅ Service Worker registered successfully:', registration.scope)
+          
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing
+            console.log('🔄 Service Worker: Update found')
 
-          if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // New service worker available
-                setShowReload(true)
-                setWaitingWorker(newWorker)
-              }
-            })
-          }
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                console.log('Service Worker state:', newWorker.state)
+                
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // New service worker available
+                  console.log('✨ Service Worker: New version available')
+                  setShowReload(true)
+                  setWaitingWorker(newWorker)
+                }
+              })
+            }
+          })
         })
-      })
+        .catch((error) => {
+          console.error('❌ Service Worker registration failed:', error)
+        })
 
       // Listen for controller change and reload page
       let refreshing = false
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (refreshing) return
+        console.log('🔄 Service Worker: Controller changed, reloading page')
         refreshing = true
         window.location.reload()
       })
+    } else {
+      console.log('⚠️  Service Worker not supported in this browser')
     }
   }, [])
 

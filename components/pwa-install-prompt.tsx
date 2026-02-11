@@ -3,67 +3,41 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { X, Download, Smartphone } from "lucide-react"
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>
-}
+import { usePWAInstall } from "@/hooks/use-pwa-install"
 
 export function PWAInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+  const { isInstallable, isInstalled, promptInstall } = usePWAInstall()
   const [showPrompt, setShowPrompt] = useState(false)
   const [isIOS, setIsIOS] = useState(false)
-  const [isStandalone, setIsStandalone] = useState(false)
 
   useEffect(() => {
     // Check if running on iOS
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
     setIsIOS(isIOSDevice)
 
-    // Check if already installed (standalone mode)
-    const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone ||
-      document.referrer.includes('android-app://')
-    
-    setIsStandalone(isInStandaloneMode)
-
     // Check if user already dismissed the prompt
     const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-dismissed')
     
-    if (!isInStandaloneMode && !hasSeenPrompt) {
-      // For Android/Desktop - listen for beforeinstallprompt
-      const handleBeforeInstallPrompt = (e: Event) => {
-        e.preventDefault()
-        setDeferredPrompt(e as BeforeInstallPromptEvent)
+    if (!isInstalled && !hasSeenPrompt) {
+      // For Android/Desktop - show when installable
+      if (isInstallable) {
         setTimeout(() => setShowPrompt(true), 3000) // Show after 3 seconds
       }
-
-      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-
+      
       // For iOS - show custom prompt after delay
       if (isIOSDevice && !hasSeenPrompt) {
         setTimeout(() => setShowPrompt(true), 5000) // Show after 5 seconds
       }
-
-      return () => {
-        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-      }
     }
-  }, [])
+  }, [isInstallable, isInstalled])
 
   const handleInstall = async () => {
-    if (!deferredPrompt) {
-      return
+    const accepted = await promptInstall()
+    
+    if (accepted) {
+      console.log('✅ PWA: User accepted the install prompt')
     }
 
-    deferredPrompt.prompt()
-    const { outcome } = await deferredPrompt.userChoice
-
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt')
-    }
-
-    setDeferredPrompt(null)
     setShowPrompt(false)
     localStorage.setItem('pwa-install-prompt-dismissed', 'true')
   }
@@ -73,7 +47,7 @@ export function PWAInstallPrompt() {
     localStorage.setItem('pwa-install-prompt-dismissed', 'true')
   }
 
-  if (!showPrompt || isStandalone) {
+  if (!showPrompt || isInstalled) {
     return null
   }
 
@@ -103,7 +77,7 @@ export function PWAInstallPrompt() {
                 "Tambahkan aplikasi ini ke home screen untuk akses cepat dan pengalaman yang lebih baik"
               )}
             </p>
-            {!isIOS && deferredPrompt && (
+            {!isIOS && isInstallable && (
               <div className="flex gap-2">
                 <Button
                   size="sm"
