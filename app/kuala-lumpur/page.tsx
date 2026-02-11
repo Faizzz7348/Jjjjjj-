@@ -402,7 +402,7 @@ export default function KualaLumpurPage() {
                   setRoutes(routes.map(r => r.id === viewRoute.id ? updatedRoute : r))
                   setViewRoute(updatedRoute)
                 }}
-                className="h-8 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
+                className="h-8 w-full rounded-md border border-input bg-background px-3 py-1 text-base"
               >
                 <option value="Daily">Daily</option>
                 <option value="Alt 1">Alt 1</option>
@@ -959,7 +959,7 @@ export default function KualaLumpurPage() {
               </label>
               <select
                 id="shift"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"
                 value={formData.shift}
                 onChange={(e) => setFormData({ ...formData, shift: e.target.value as "AM" | "PM" })}
               >
@@ -1014,7 +1014,7 @@ export default function KualaLumpurPage() {
               </label>
               <select
                 id="edit-shift"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"
                 value={formData.shift}
                 onChange={(e) => setFormData({ ...formData, shift: e.target.value as "AM" | "PM" })}
               >
@@ -1389,7 +1389,7 @@ export default function KualaLumpurPage() {
               </label>
               <select
                 id="loc-delivery"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"
                 value={locationFormData.delivery}
                 onChange={(e) => setLocationFormData({ ...locationFormData, delivery: e.target.value })}
               >
