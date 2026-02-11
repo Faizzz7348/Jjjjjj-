@@ -54,7 +54,7 @@ export async function PUT(
             where: { id: loc.id },
             update: {
               code: loc.code,
-              name: loc.location || loc.name,  // Accept either location or name
+              name: loc.location || loc.name || 'Unnamed Location',  // Accept either location or name with fallback
               address: loc.address || '',  // Don't use delivery field as fallback
               contact: loc.contact || '',
               notes: loc.notes || '',
@@ -68,7 +68,7 @@ export async function PUT(
               id: loc.id,
               routeId: id,
               code: loc.code,
-              name: loc.location || loc.name,
+              name: loc.location || loc.name || 'Unnamed Location',  // Provide fallback
               address: loc.address || '',
               contact: loc.contact || '',
               notes: loc.notes || '',
@@ -126,7 +126,7 @@ export async function PUT(
             data: {
               routeId: id,
               code: loc.code,
-              name: loc.location || loc.name,
+              name: loc.location || loc.name || 'Unnamed Location',  // Provide fallback
               address: loc.address || '',  // Don't use delivery field as fallback
               contact: loc.contact || '',
               notes: loc.notes || '',
