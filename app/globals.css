@@ -85,15 +85,16 @@
   }
   
   html {
-    height: 100vh;
-    height: 100svh; /* Use small viewport height for better PWA support */
+    height: 100%;
     overflow: hidden;
+    position: fixed;
+    width: 100%;
   }
   
   body {
     @apply bg-background text-foreground;
     height: 100vh;
-    height: 100svh; /* Use small viewport height for better PWA support */
+    height: 100dvh; /* Use dynamic viewport height */
     overflow: hidden;
     width: 100%;
     margin: 0;
@@ -101,30 +102,32 @@
     /* Prevent pull-to-refresh and overscroll */
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
   
   #__next {
-    height: 100vh;
-    height: 100svh;
+    height: 100%;
     overflow: hidden;
   }
 }
 
 @layer utilities {
-  /* Dynamic viewport height utilities - using svh for better PWA support */
+  /* Dynamic viewport height utilities */
   .h-dvh {
     height: 100vh;
-    height: 100svh;
+    height: 100dvh;
   }
   
   .min-h-dvh {
     min-height: 100vh;
-    min-height: 100svh;
+    min-height: 100dvh;
   }
   
   .max-h-dvh {
     max-height: 100vh;
-    max-height: 100svh;
+    max-height: 100dvh;
   }
   
   /* Page transitions */

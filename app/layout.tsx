@@ -144,7 +144,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-dvh">
+      <body>
         <LanguageProvider>
           <ToastProvider>
             <PWAOfflineIndicator />
