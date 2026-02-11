@@ -24,13 +24,13 @@ export function PageLayout({ children }: { children: ReactNode }) {
       <SidebarProvider defaultOpen={false}>
         <div className="relative flex flex-col w-full h-full">
           {/* Main content - scrollable */}
-          <div className="flex-1 w-full overflow-y-auto overflow-x-hidden page-transition mt-6">{children}</div>
+          <div className="flex-1 w-full overflow-y-auto overflow-x-hidden page-transition">{children}</div>
           
           {/* Overlay backdrop */}
           <SidebarOverlay />
           
           {/* Floating sidebar */}
-          <div className="fixed inset-y-0 left-0 z-50 mt-6">
+          <div className="fixed inset-y-0 left-0 z-50">
             <AppSidebar />
           </div>
         </div>
