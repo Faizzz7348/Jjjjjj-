@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search, Plus, Eye, Edit, Trash2, FileText, ArrowLeft, Info, Power, Menu, Maximize2, Save, Loader2 } from "lucide-react"
+import dynamic from "next/dynamic"
+import { Search, Plus, Eye, Edit, Trash2, FileText, ArrowLeft, Info, Power, Menu, Maximize2, Save, Loader2, Map } from "lucide-react"
 import { PageLayout } from "@/components/page-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,6 +47,26 @@ import { useToast } from "@/components/ui/toast"
 import { useRoutes } from "@/hooks/use-routes"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
+// Dynamic import for RouteMap to avoid SSR issues with Leaflet
+const RouteMap = dynamic(
+  () => import("@/components/route-map").then((mod) => mod.RouteMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-full items-center justify-center bg-muted rounded-lg backdrop-blur-sm">
+        <div className="flex flex-col items-center gap-3">
+          <LoadingSpinner size="lg" className="loading-spinner-pulse" />
+          <p className="text-lg text-muted-foreground font-medium">
+            <span className="inline-block animate-lightning-text">
+              Loading map...
+            </span>
+          </p>
+        </div>
+      </div>
+    ),
+  }
+)
+
 export default function SelangorPage() {
   const { addToast } = useToast()
   const { 
@@ -65,6 +86,7 @@ export default function SelangorPage() {
   const [showViewDialog, setShowViewDialog] = useState(false)
   const [viewRoute, setViewRoute] = useState<Route | null>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [showMap, setShowMap] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null)
@@ -74,6 +96,7 @@ export default function SelangorPage() {
   const [editingCell, setEditingCell] = useState<{id: string, field: string} | null>(null)
   const [isEditMode, setIsEditMode] = useState(false)
   const [isSwitchingMode, setIsSwitchingMode] = useState(false)
+  const [showModeTransition, setShowModeTransition] = useState(false)
   const [showMoveDialog, setShowMoveDialog] = useState(false)
   const [moveDestination, setMoveDestination] = useState<{region: string, routeId: string}>({region: "selangor", routeId: ""})
   const [showDeleteRowsDialog, setShowDeleteRowsDialog] = useState(false)
@@ -600,6 +623,7 @@ export default function SelangorPage() {
     setViewRoute(route)
     setShowViewDialog(true)
     setIsFullscreen(false)
+    setShowMap(false)
     setSelectedRows(new Set())
   }
 
@@ -795,15 +819,20 @@ export default function SelangorPage() {
               variant={isEditMode ? "outline" : "outline"}
               onClick={async () => {
                 if (isEditMode) {
+                  setShowModeTransition(true)
+                  await new Promise(resolve => setTimeout(resolve, 2000))
                   await handleExitEditMode()
+                  setShowModeTransition(false)
                 } else {
+                  setShowModeTransition(true)
                   setIsSwitchingMode(true)
-                  await new Promise(resolve => setTimeout(resolve, 300))
+                  await new Promise(resolve => setTimeout(resolve, 2000))
                   setIsEditMode(true)
                   setIsSwitchingMode(false)
+                  setShowModeTransition(false)
                 }
               }}
-              disabled={isSwitchingMode}
+              disabled={isSwitchingMode || showModeTransition}
               className={cn(
                 "gap-2",
                 isEditMode && "text-destructive hover:text-destructive"
@@ -887,7 +916,7 @@ export default function SelangorPage() {
                             <Menu className="h-4 w-4 text-blue-500" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuContent align="end" className="w-52">
                           <DropdownMenuItem onClick={() => openViewDialog(route)}>
                             <Eye className="mr-2 h-4 w-4" />
                             View Details
@@ -1066,26 +1095,40 @@ export default function SelangorPage() {
       </Dialog>
 
       {/* View Details Dialog */}
-      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
+      <Dialog open={showViewDialog} onOpenChange={(open) => {
+        setShowViewDialog(open)
+        if (!open) setShowMap(false)
+      }}>
         <DialogContent className={`p-0 [&>button]:hidden transition-all ${
           isFullscreen 
-            ? "max-w-[100vw] w-[100vw] h-[100vh] max-h-[100vh] m-0 rounded-none" 
+            ? "max-w-[100vw] w-[100vw] h-[100vh] max-h-[100vh] m-0 rounded-none flex flex-col" 
             : "max-w-4xl max-h-[80vh]"
         }`}>
           {/* Custom Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b">
+          <div className="flex items-center justify-between px-6 py-4 border-b flex-shrink-0">
             <div className="flex-1">
               <DialogTitle className="text-lg font-semibold">Route Details - {viewRoute?.code}</DialogTitle>
               <DialogDescription className="text-sm text-muted-foreground">Location: {viewRoute?.location}</DialogDescription>
             </div>
             <div className="flex items-center gap-2">
+              {isFullscreen && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8"
+                  onClick={() => setShowMap(!showMap)}
+                  title={showMap ? "Hide Map" : "Show Map"}
+                >
+                  <Map className="h-4 w-4" />
+                </Button>
+              )}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-8 w-8">
                     <Menu className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuContent align="end" className="w-52">
                   <DropdownMenuItem onClick={() => setShowColumnCustomize(true)}>
                     Column Customize
                   </DropdownMenuItem>
@@ -1108,14 +1151,10 @@ export default function SelangorPage() {
                         onClick={() => openDeleteRowsDialog()}
                         className="text-red-600 focus:text-red-600 dark:text-red-500 dark:focus:text-red-500"
                       >
-                        <Trash2 className="h-4 w-4 mr-2" />
                         Delete Selected Rows
                       </DropdownMenuItem>
                     </>
                   )}
-                  <DropdownMenuItem>
-                    Custom Sort
-                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <Button 
@@ -1129,43 +1168,53 @@ export default function SelangorPage() {
             </div>
           </div>
           
-          {/* Table Content */}
-          <div className={`overflow-auto px-6 ${
-            isFullscreen ? "max-h-[calc(100vh-140px)]" : "max-h-[450px]"
-          }`}>
-            <Table>
-              <TableHeader>
-                <TableRow>
+          {/* Scrollable Content Area */}
+          <div className={`flex-1 overflow-y-auto ${isFullscreen ? "" : ""}`}>
+            {/* Map Container - Only shown in fullscreen when showMap is true */}
+            {isFullscreen && showMap && viewRoute?.locations && (
+              <div className="px-6 pt-4 map-container" style={{ height: "35vh" }}>
+                <RouteMap locations={viewRoute.locations} />
+              </div>
+            )}
+            
+            {/* Table Content */}
+            <div className="px-6 pb-6">
+              <div className={`overflow-auto backdrop-blur-sm bg-background/50 rounded-lg ${isFullscreen ? (showMap ? "max-h-[calc(48vh-80px)] mt-4" : "max-h-[calc(83vh-100px)] mt-4") : "max-h-[450px]"}`}>
+              <table className="w-full caption-bottom text-sm">
+                <thead className="[&_tr]:border-b">
+                  <tr className="border-b transition-colors hover:bg-muted/50">
                   {isEditMode && (
-                    <TableHead className="w-12">
+                    <th className="h-10 px-2 text-center align-middle font-medium text-muted-foreground text-[13px] w-12 sticky top-0 z-10 bg-muted border-b shadow-sm">
                       <Checkbox 
                         checked={viewRoute?.locations && selectedRows.size === viewRoute.locations.length && viewRoute.locations.length > 0}
                         onCheckedChange={toggleSelectAll}
                       />
-                    </TableHead>
+                    </th>
                   )}
                   {visibleColumns.map(col => {
-                    if (col.id === 'no') return <TableHead key={col.id} className="w-16">No</TableHead>
-                    if (col.id === 'code') return <TableHead key={col.id} className="w-32">Code</TableHead>
-                    if (col.id === 'location') return <TableHead key={col.id}>Location</TableHead>
-                    if (col.id === 'lat' && isEditMode) return <TableHead key={col.id} className="w-28">Latitude</TableHead>
-                    if (col.id === 'lng' && isEditMode) return <TableHead key={col.id} className="w-28">Longitude</TableHead>
-                    if (col.id === 'delivery') return <TableHead key={col.id} className="w-40 text-center">Delivery</TableHead>
-                    if (col.id === 'action') return <TableHead key={col.id} className="text-center">Action</TableHead>
+                    const baseClass = "h-10 px-2 text-center align-middle font-medium text-muted-foreground text-[13px] sticky top-0 z-10 bg-muted border-b shadow-sm"
+                    if (col.id === 'no') return <th key={col.id} className={cn(baseClass, "w-16")}>No</th>
+                    if (col.id === 'code') return <th key={col.id} className={cn(baseClass, "w-32")}>Code</th>
+                    if (col.id === 'location') return <th key={col.id} className={baseClass}>Location</th>
+                    if (col.id === 'lat' && isEditMode) return <th key={col.id} className={cn(baseClass, "w-28")}>Latitude</th>
+                    if (col.id === 'lng' && isEditMode) return <th key={col.id} className={cn(baseClass, "w-28")}>Longitude</th>
+                    if (col.id === 'delivery') return <th key={col.id} className={cn(baseClass, "w-40")}>Delivery</th>
+                    if (col.id === 'action') return <th key={col.id} className={baseClass}>Action</th>
                     return null
                   })}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+                  </tr>
+                </thead>
+                <tbody className="[&_tr:last-child]:border-0">
                 {/* Data Rows */}
                 {sortedLocations.map((item) => {
                   const itemHasDelivery = hasDeliveryToday(item.deliveryMode || "daily")
                   const isDuplicate = checkDuplicate(item.code, item.id)
                   
                   return (
-                    <TableRow 
+                    <tr 
                       key={item.id}
                       className={cn(
+                        "border-b transition-colors hover:bg-muted/50",
                         "transition-opacity",
                         !itemHasDelivery && "opacity-40",
                         isDuplicate && "bg-red-50 dark:bg-red-950/20"
@@ -1180,13 +1229,13 @@ export default function SelangorPage() {
                         </TableCell>
                       )}
                       {visibleColumns.map(col => renderTableCell(col.id, item, itemHasDelivery, isDuplicate))}
-                    </TableRow>
+                    </tr>
                   )
                 })}
                 
                 {/* Add New Row */}
                 {isEditMode && (
-                  <TableRow 
+                  <tr 
                     className="border-2 border-dashed hover:bg-green-50/50 dark:hover:bg-green-950/20 cursor-pointer group"
                     onClick={handleAddEmptyRow}
                   >
@@ -1200,14 +1249,16 @@ export default function SelangorPage() {
                         </span>
                       </div>
                     </TableCell>
-                  </TableRow>
+                  </tr>
                 )}
-              </TableBody>
-            </Table>
+              </tbody>
+            </table>
+            </div>
+          </div>
           </div>
           
           {/* Footer */}
-          <div className="flex justify-end px-6 py-4 border-t">
+          <div className="flex justify-end px-6 py-4 border-t flex-shrink-0">
             <Button onClick={() => setShowViewDialog(false)}>Close</Button>
           </div>
         </DialogContent>
@@ -1513,6 +1564,11 @@ export default function SelangorPage() {
           regionKey="selangor"
           currentSort={customRowSort}
         />
+      )}
+
+      {/* Edit Mode Transition Overlay */}
+      {showModeTransition && (
+        <div className="fixed inset-0 bg-black/80 z-[9999] transition-opacity duration-[2000ms] animate-in fade-in" />
       )}
     </PageLayout>
   )

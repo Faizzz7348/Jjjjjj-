@@ -297,7 +297,7 @@ export default function CalendarPage() {
                 padding: 0.375rem 0.75rem;
                 border-radius: 0.5rem;
                 font-weight: 500;
-                font-size: 0.8125rem;
+                font-size: 0.875rem;
                 box-shadow: none;
                 transition: all 0.2s ease;
               }
@@ -358,7 +358,7 @@ export default function CalendarPage() {
               .fc .fc-col-header-cell-cushion {
                 color: hsl(var(--foreground));
                 text-decoration: none;
-                font-size: 0.9375rem;
+                font-size: 0.875rem;
                 font-weight: 700;
               }
               
@@ -408,7 +408,7 @@ export default function CalendarPage() {
               
               /* Time labels - Much more visible */
               .fc .fc-timegrid-slot-label {
-                font-size: 0.8125rem;
+                font-size: 0.875rem;
                 color: hsl(var(--foreground));
                 font-weight: 600;
               }
@@ -447,7 +447,7 @@ export default function CalendarPage() {
                 color: hsl(var(--foreground));
                 padding: 0.875rem 1rem;
                 font-weight: 700;
-                font-size: 0.9375rem;
+                font-size: 0.875rem;
                 border: 1px solid hsl(var(--border));
               }
               
@@ -463,7 +463,7 @@ export default function CalendarPage() {
               .fc .fc-list-event-time {
                 color: hsl(var(--foreground));
                 font-weight: 600;
-                font-size: 0.9375rem;
+                font-size: 0.875rem;
               }
               
               .fc .fc-list-table td {
@@ -480,7 +480,7 @@ export default function CalendarPage() {
               
               .fc .fc-timegrid-axis-cushion {
                 color: hsl(var(--foreground));
-                font-size: 0.8125rem;
+                font-size: 0.875rem;
                 font-weight: 600;
               }
               

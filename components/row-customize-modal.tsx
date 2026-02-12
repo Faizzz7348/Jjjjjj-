@@ -285,7 +285,7 @@ export function RowCustomizeModal<T extends { id: string; code: string; location
                 {t('myLists')} ({savedLists.length})
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-64">
+            <DropdownMenuContent align="start" className="w-52">
               {savedLists.length === 0 ? (
                 <div className="px-2 py-4 text-center text-sm text-muted-foreground">
                   {t('noSavedLists')}

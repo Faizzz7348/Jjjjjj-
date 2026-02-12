@@ -78,7 +78,7 @@ const DropdownMenuContent = React.forwardRef<
         ref={ref}
         sideOffset={sideOffset}
         className={cn(
-          "z-[52] min-w-[10rem] overflow-hidden rounded-xl border-2 bg-gradient-to-br from-background via-background to-primary/5 p-2 text-popover-foreground shadow-lg shadow-primary/10",
+          "z-[52] min-w-[13rem] overflow-hidden rounded-xl border-2 bg-gradient-to-br from-background via-background to-primary/5 p-2 text-popover-foreground shadow-lg shadow-primary/10",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
@@ -105,7 +105,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium outline-none",
+      "relative flex cursor-pointer select-none items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium outline-none text-center",
       "transition-all duration-200",
       "hover:bg-primary/10 hover:text-primary hover:scale-[1.02] hover:shadow-sm",
       "focus:bg-primary/10 focus:text-primary focus:scale-[1.02]",
@@ -184,7 +184,7 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      "px-3 py-2 text-xs font-bold uppercase tracking-wider text-primary/70",
+      "px-3 py-2 text-xs font-bold uppercase tracking-wider text-primary/70 text-center",
       inset && "pl-10",
       className
     )}

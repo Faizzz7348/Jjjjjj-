@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate PWA Icons</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #f5f5f5;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+    
+    button:hover {
+      background: #5568d3;
+    }
+    
+    #preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .icon-preview {
+      text-align: center;
+      padding: 1rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+    
+    .icon-preview canvas {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    
+    .icon-preview p {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: #666;
+    }
+    
+    .instructions {
+      background: #e3f2fd;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-left: 4px solid #2196f3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 PWA Icon Generator</h1>
+    
+    <div class="instructions">
+      <strong>Instructions:</strong>
+      <ol>
+        <li>Click "Generate Icons" to create placeholder PWA icons</li>
+        <li>Right-click each icon and "Save Image As..."</li>
+        <li>Save to <code>/public/icons/</code> folder with the correct filename</li>
+        <li>Or use professional tools mentioned in PWA_SETUP.md</li>
+      </ol>
+    </div>
+    
+    <button onclick="generateIcons()">Generate Icons</button>
+    
+    <div id="preview"></div>
+  </div>
+
+  <script>
+    const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+    
+    function generateIcons() {
+      const preview = document.getElementById('preview');
+      preview.innerHTML = '';
+      
+      sizes.forEach(size => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        
+        // Create gradient background
+        const gradient = ctx.createLinearGradient(0, 0, size, size);
+        gradient.addColorStop(0, '#667eea');
+        gradient.addColorStop(1, '#764ba2');
+        ctx.fillStyle = gradient;
+        
+        // Rounded rectangle
+        const radius = size * 0.15;
+        ctx.beginPath();
+        ctx.moveTo(radius, 0);
+        ctx.lineTo(size - radius, 0);
+        ctx.arcTo(size, 0, size, radius, radius);
+        ctx.lineTo(size, size - radius);
+        ctx.arcTo(size, size, size - radius, size, radius);
+        ctx.lineTo(radius, size);
+        ctx.arcTo(0, size, 0, size - radius, radius);
+        ctx.lineTo(0, radius);
+        ctx.arcTo(0, 0, radius, 0, radius);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Add text
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // App initial
+        ctx.font = `bold ${size * 0.4}px system-ui`;
+        ctx.fillText('VM', size / 2, size / 2 - size * 0.05);
+        
+        // Subtitle
+        ctx.font = `${size * 0.12}px system-ui`;
+        ctx.fillText('ROUTE', size / 2, size / 2 + size * 0.25);
+        
+        // Create preview
+        const div = document.createElement('div');
+        div.className = 'icon-preview';
+        
+        const displayCanvas = canvas.cloneNode();
+        const displayCtx = displayCanvas.getContext('2d');
+        displayCtx.drawImage(canvas, 0, 0);
+        
+        div.appendChild(displayCanvas);
+        
+        const p = document.createElement('p');
+        p.textContent = `icon-${size}x${size}.png`;
+        div.appendChild(p);
+        
+        const downloadBtn = document.createElement('button');
+        downloadBtn.textContent = 'Download';
+        downloadBtn.style.fontSize = '0.75rem';
+        downloadBtn.style.padding = '0.5rem 1rem';
+        downloadBtn.onclick = () => {
+          const link = document.createElement('a');
+          link.download = `icon-${size}x${size}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        };
+        div.appendChild(downloadBtn);
+        
+        preview.appendChild(div);
+      });
+    }
+    
+    // Auto-generate on load
+    window.onload = () => {
+      generateIcons();
+    };
+  </script>
+</body>
+</html>
