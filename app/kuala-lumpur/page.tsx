@@ -255,7 +255,7 @@ export default function KualaLumpurPage() {
     
     // Apply custom sort if active
     if (customRowSort && customRowSort.length > 0) {
-      const sortMap = new Map<string, number>()
+      const sortMap = new globalThis.Map<string, number>()
       customRowSort.forEach((s, idx) => {
         sortMap.set(s.id, s.customOrder ?? idx)
       })
@@ -1175,7 +1175,7 @@ export default function KualaLumpurPage() {
             {/* Map Container - Only shown in fullscreen when showMap is true */}
             {isFullscreen && showMap && viewRoute?.locations && (
               <div className="px-6 pt-4 map-container" style={{ height: "35vh" }}>
-                <RouteMap locations={viewRoute.locations} />
+                <RouteMap locations={viewRoute.locations.filter((loc): loc is Required<Pick<typeof loc, 'lat' | 'lng'>> & typeof loc => Boolean(loc.lat && loc.lng))} />
               </div>
             )}
             
