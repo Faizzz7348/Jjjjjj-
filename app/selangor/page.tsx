@@ -255,7 +255,10 @@ export default function SelangorPage() {
     
     // Apply custom sort if active
     if (customRowSort && customRowSort.length > 0) {
-      const sortMap = new Map(customRowSort.map((s, idx) => [s.id, s.customOrder ?? idx]))
+      const sortMap = new Map<string, number>()
+      customRowSort.forEach((s, idx) => {
+        sortMap.set(s.id, s.customOrder ?? idx)
+      })
       const sortFn = (a: Location, b: Location) => {
         const orderA = sortMap.get(a.id) ?? 9999
         const orderB = sortMap.get(b.id) ?? 9999
@@ -1568,7 +1571,7 @@ export default function SelangorPage() {
 
       {/* Edit Mode Transition Overlay */}
       {showModeTransition && (
-        <div className="fixed inset-0 bg-black/80 z-[9999] transition-opacity duration-[2000ms] animate-in fade-in" />
+        <div className="fixed inset-0 bg-black/80 z-[9999] animate-mode-transition" />
       )}
     </PageLayout>
   )

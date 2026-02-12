@@ -492,11 +492,22 @@
   }
 
   /* Edit mode transition overlay */
-  .animate-in {
-    animation-fill-mode: both;
+  .animate-mode-transition {
+    animation: modeTransitionFade 2s ease-in-out forwards;
   }
 
-  .fade-in {
-    animation-name: fadeIn;
+  @keyframes modeTransitionFade {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 }
