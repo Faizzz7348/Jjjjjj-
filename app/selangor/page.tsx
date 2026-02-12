@@ -46,6 +46,7 @@ import { cn, getRelativeTime } from "@/lib/utils"
 import { useToast } from "@/components/ui/toast"
 import { useRoutes } from "@/hooks/use-routes"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { SubmenuNav } from "@/components/submenu-nav"
 
 // Dynamic import for RouteMap to avoid SSR issues with Leaflet
 const RouteMap = dynamic(
@@ -793,7 +794,7 @@ export default function SelangorPage() {
               if (isEditMode) {
                 handleExitEditMode()
               } else {
-                router.back()
+                router.push('/home')
               }
             }}
             className="h-9 w-9"
@@ -1573,6 +1574,9 @@ export default function SelangorPage() {
       {showModeTransition && (
         <div className="fixed inset-0 bg-black/80 z-[9999] animate-mode-transition" />
       )}
+
+      {/* Bottom Navigation for Submenu Pages */}
+      <SubmenuNav />
     </PageLayout>
   )
 }
