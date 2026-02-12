@@ -116,7 +116,7 @@ export default function SelangorPage() {
     delivery: "Daily",
     shift: "AM" as "AM" | "PM",
   })
-  const [currentTime, setCurrentTime] = useState(new Date())
+  const [currentTime, setCurrentTime] = useState<Date>(new Date('2026-02-12T12:00:00'))
   const [showColumnCustomize, setShowColumnCustomize] = useState(false)
   const [showRowCustomize, setShowRowCustomize] = useState(false)
   const [columnConfig, setColumnConfig] = useState<ColumnConfig[]>([
@@ -132,6 +132,9 @@ export default function SelangorPage() {
 
   // Update time every minute for real-time updates
   useEffect(() => {
+    // Set current time immediately on mount
+    setCurrentTime(new Date())
+    
     const interval = setInterval(() => {
       setCurrentTime(new Date())
     }, 60000) // Update every 60 seconds
@@ -1182,7 +1185,7 @@ export default function SelangorPage() {
             )}
             
             {/* Table Content */}
-            <div className="px-6 pb-6">
+            <div className="px-6 pb-2">
               <div className={`overflow-auto backdrop-blur-sm bg-background/50 rounded-lg ${isFullscreen ? (showMap ? "max-h-[calc(48vh-80px)] mt-4" : "max-h-[calc(83vh-100px)] mt-4") : "max-h-[450px]"}`}>
               <table className="w-full caption-bottom text-sm">
                 <thead className="[&_tr]:border-b">
@@ -1262,7 +1265,7 @@ export default function SelangorPage() {
           </div>
           
           {/* Footer */}
-          <div className="flex justify-end px-6 py-4 border-t flex-shrink-0">
+          <div className="flex justify-end px-6 py-3 border-t flex-shrink-0">
             <Button onClick={() => setShowViewDialog(false)}>Close</Button>
           </div>
         </DialogContent>
