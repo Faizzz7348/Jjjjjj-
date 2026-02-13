@@ -113,6 +113,8 @@
     position: fixed;
     top: 0;
     left: 0;
+    /* Ensure content fills viewport including safe areas */
+    padding-bottom: env(safe-area-inset-bottom);
   }
   
   #__next {
@@ -184,7 +186,7 @@
   }
 
   .safe-bottom {
-    padding-bottom: max(env(safe-area-inset-bottom), 8px);
+    padding-bottom: env(safe-area-inset-bottom);
   }
   
   .safe-left {
@@ -193,6 +195,15 @@
   
   .safe-right {
     padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Additional padding utilities for safe areas */
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+  }
+  
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom);
   }
   
   /* Professional Sidebar Styling */
