@@ -22,9 +22,9 @@ export function PageLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
       <SidebarProvider defaultOpen={false}>
-        <div className="relative flex flex-col w-full h-full overflow-hidden safe-top safe-bottom">
+        <div className="relative flex flex-col w-full h-dvh overflow-hidden">
           {/* Main content - scrollable */}
-          <div className="flex-1 w-full overflow-y-auto overflow-x-hidden page-transition pb-safe">{children}</div>
+          <div className="flex-1 w-full overflow-y-auto overflow-x-hidden page-transition">{children}</div>
           
           {/* Overlay backdrop */}
           <SidebarOverlay />
