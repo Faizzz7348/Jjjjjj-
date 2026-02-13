@@ -157,36 +157,36 @@ export default function CalendarPage() {
 
   return (
     <PageLayout>
-      {/* Header */}
+      {/* Header - Responsive with media queries */}
       <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-        <div className="flex h-16 items-center gap-4 px-6">
-          <SidebarTrigger className="h-9 w-9" />
-          <div className="flex-1">
-            <h1 className="text-xl font-semibold flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              Calendar
+        <div className="flex h-14 md:h-16 items-center gap-2 md:gap-4 px-4 md:px-6">
+          <SidebarTrigger className="h-9 md:h-10 w-9 md:w-10" />
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+              <Calendar className="h-4 w-4 md:h-5 md:w-5" />
+              <span className="truncate">Calendar</span>
             </h1>
-            <p className="text-sm text-muted-foreground">Kalendar bulanan</p>
+            <p className="text-xs md:text-sm text-muted-foreground truncate">Kalendar bulanan</p>
           </div>
           
-          {/* Single View Mode Cycle Button */}
+          {/* Single View Mode Cycle Button - Responsive */}
           <button
             key={viewMode}
             onClick={cycleView}
             className={cn(
-              "text-white px-4 py-2 rounded-lg border",
-              "flex items-center gap-2",
+              "text-white px-2 md:px-4 py-1.5 md:py-2 rounded-lg border",
+              "flex items-center gap-1 md:gap-2",
               "transition-all duration-200",
               "shadow-sm hover:shadow-md",
-              "active:scale-95",
-              "text-sm font-medium",
+              "active:scale-95 touch-manipulation",
+              "text-xs md:text-sm font-medium flex-shrink-0",
               getViewButtonStyle(viewMode)
             )}
           >
             {currentViewOption.icon}
-            <span>{currentViewOption.label}</span>
+            <span className="hidden sm:inline">{currentViewOption.label}</span>
             <svg 
-              className="w-4 h-4 ml-1" 
+              className="w-3 h-3 md:w-4 md:h-4 ml-0.5 md:ml-1" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -202,63 +202,66 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col gap-6 p-6 max-w-7xl mx-auto">
+      {/* Content - Responsive padding and spacing */}
+      <div className="flex flex-col gap-4 md:gap-6 p-4 md:p-6 max-w-7xl mx-auto w-full">
         {viewMode === "month" ? (
-          // Custom Month View
+          // Custom Month View - Responsive
           <div className="rounded-xl border bg-card shadow-sm">
-            {/* Calendar Header */}
-            <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-xl font-bold capitalize">{monthYear}</h2>
-              <div className="flex items-center gap-2">
+            {/* Calendar Header - Responsive */}
+            <div className="flex items-center justify-between p-3 md:p-6 border-b gap-2 md:gap-4">
+              <h2 className="text-base md:text-xl font-bold capitalize truncate min-w-0 flex-1">{monthYear}</h2>
+              <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={goToToday}
-                  className="text-xs px-2.5 py-1.5 h-8"
+                  className="text-xs px-2 md:px-2.5 py-1 md:py-1.5 h-7 md:h-8 active:scale-95 touch-manipulation"
                 >
-                  Hari Ini
+                  <span className="hidden sm:inline">Hari Ini</span>
+                  <span className="sm:hidden">Hari Ini</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={goToPreviousMonth}
-                  className="h-8 w-8"
+                  className="h-7 w-7 md:h-8 md:w-8 active:scale-95 touch-manipulation"
                 >
-                  <ChevronLeft className="h-3.5 w-3.5" />
+                  <ChevronLeft className="h-3 w-3 md:h-3.5 md:w-3.5" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={goToNextMonth}
-                  className="h-8 w-8"
+                  className="h-7 w-7 md:h-8 md:w-8 active:scale-95 touch-manipulation"
                 >
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  <ChevronRight className="h-3 w-3 md:h-3.5 md:w-3.5" />
                 </Button>
               </div>
             </div>
 
-            {/* Calendar Grid */}
-            <div className="p-6">
-              {/* Week Days Header */}
-              <div className="grid grid-cols-7 gap-2 mb-2">
+            {/* Calendar Grid - Responsive */}
+            <div className="p-3 md:p-6">
+              {/* Week Days Header - Responsive */}
+              <div className="grid grid-cols-7 gap-1 md:gap-2 mb-1 md:mb-2">
                 {weekDays.map((day) => (
                   <div
                     key={day}
-                    className="text-center text-sm font-semibold text-muted-foreground py-2"
+                    className="text-center text-[10px] md:text-sm font-semibold text-muted-foreground py-1 md:py-2"
                   >
-                    {day}
+                    <span className="hidden sm:inline">{day}</span>
+                    <span className="sm:hidden">{day.substring(0, 1)}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Days Grid */}
-              <div className="grid grid-cols-7 gap-2">
+              {/* Days Grid - Responsive */}
+              <div className="grid grid-cols-7 gap-1 md:gap-2">
                 {daysList.map((day, index) => (
                   <div
                     key={index}
                     className={cn(
-                      "aspect-square flex items-start justify-end p-2 rounded-lg text-sm font-medium transition-all duration-200",
+                      "aspect-square flex items-start justify-end p-1 md:p-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200",
+                      "active:scale-95 touch-manipulation",
                       day === null && "invisible",
                       day !== null && !isToday(day) && "hover:bg-muted cursor-pointer",
                       day !== null && isToday(day) && "bg-primary text-primary-foreground shadow-md hover:shadow-lg"
