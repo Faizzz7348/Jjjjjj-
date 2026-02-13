@@ -1,4 +1,4 @@
-import type { Route, Location, DeliveryMode } from '@/app/kuala-lumpur/data'
+import type { Route, Location, DeliveryMode } from '@/types/route'
 
 /**
  * Load all routes for a specific region from database via API

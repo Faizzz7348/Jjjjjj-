@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { Route } from '@/app/kuala-lumpur/data'
+import type { Route } from '@/types/route'
 import { loadRoutes, saveRoutes, initializeDatabase } from '@/lib/database'
 
 export function useRoutes(region: string, initialData: Route[]) {

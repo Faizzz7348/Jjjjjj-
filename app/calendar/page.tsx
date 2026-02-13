@@ -16,7 +16,7 @@ import type { EventInput } from "@fullcalendar/core"
 type ViewMode = "month" | "week" | "day" | "list"
 
 export default function CalendarPage() {
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const [currentDate, setCurrentDate] = useState<Date>(new Date('2026-02-12T00:00:00'))
   const [viewMode, setViewMode] = useState<ViewMode>("month")
   const [todayDate, setTodayDate] = useState<Date | null>(null)
   const calendarRef = useRef<any>(null)
@@ -24,21 +24,22 @@ export default function CalendarPage() {
   // Set today's date on client side only
   useEffect(() => {
     setTodayDate(new Date())
+    setCurrentDate(new Date())
   }, [])
 
   const [events, setEvents] = useState<EventInput[]>([
     {
       id: "1",
       title: "Team Meeting",
-      start: new Date().toISOString().split("T")[0] + "T10:00:00",
-      end: new Date().toISOString().split("T")[0] + "T11:00:00",
+      start: "2026-02-12T10:00:00",
+      end: "2026-02-12T11:00:00",
       backgroundColor: "#3b82f6",
       borderColor: "#3b82f6",
     },
     {
       id: "2",
       title: "Project Deadline",
-      start: new Date(Date.now() + 86400000 * 3).toISOString().split("T")[0],
+      start: "2026-02-15",
       allDay: true,
       backgroundColor: "#ef4444",
       borderColor: "#ef4444",
@@ -46,8 +47,8 @@ export default function CalendarPage() {
     {
       id: "3",
       title: "Lunch Break",
-      start: new Date().toISOString().split("T")[0] + "T12:00:00",
-      end: new Date().toISOString().split("T")[0] + "T13:00:00",
+      start: "2026-02-12T12:00:00",
+      end: "2026-02-12T13:00:00",
       backgroundColor: "#22c55e",
       borderColor: "#22c55e",
     },

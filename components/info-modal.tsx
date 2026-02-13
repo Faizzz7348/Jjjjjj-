@@ -295,13 +295,14 @@ export function InfoModal({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant={triggerVariant} size="icon" className={triggerClassName || "h-8 w-8"}>
-          <Info className="h-4 w-4" />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant={triggerVariant} size="icon" className={triggerClassName || "h-8 w-8"}>
+            <Info className="h-4 w-4" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Info className="h-5 w-5" />
@@ -436,6 +437,7 @@ export function InfoModal({
           </div>
         </div>
       </DialogContent>
+    </Dialog>
 
       {/* Confirmation Dialog */}
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
@@ -800,6 +802,6 @@ export function InfoModal({
           </div>
         </DialogContent>
       </Dialog>
-    </Dialog>
+    </>
   )
 }
